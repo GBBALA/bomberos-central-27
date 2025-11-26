@@ -1,0 +1,1 @@
+export default function InscripcionForm() { return <h1>Formulario Aspirantes</h1>; }

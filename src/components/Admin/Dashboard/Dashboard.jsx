@@ -1,0 +1,1 @@
+export default function Dashboard() { return <h1>Panel de Control (Privado)</h1>; }

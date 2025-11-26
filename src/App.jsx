@@ -1,35 +1,61 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+
+// Componentes Públicos
+import Navbar from './components/Common/Navbar/Navbar';
+import Hero from './components/Public/Hero/Hero';
+import InscripcionForm from './components/Public/InscripcionForm/InscripcionForm';
+import InventoryGallery from './components/Public/InventoryGallery/InventoryGallery';
+
+// Componentes Admin
+import Login from './components/Admin/Login/Login';
+import Dashboard from './components/Admin/Dashboard/Dashboard';
+import InventoryMgr from './components/Admin/InventoryMgr/InventoryMgr';
+import ProtectedRoute from './components/Admin/ProtectedRoute';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <BrowserRouter>
+      {/* El Navbar aparece en todas las páginas (podrías ocultarlo en login si quisieras) */}
+      <Navbar />
+
+      <Routes>
+        {/* --- RUTAS PÚBLICAS --- */}
+        <Route path="/" element={
+          <>
+            <Hero />
+            <InventoryGallery />
+          </>
+        } />
+        <Route path="/inscripcion" element={<InscripcionForm />} />
+        
+        {/* --- RUTA DE ACCESO --- */}
+        <Route path="/login" element={<Login />} />
+
+        {/* --- RUTAS PRIVADAS (Protegidas) --- */}
+        <Route 
+          path="/admin/dashboard" 
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } 
+        />
+        
+        <Route 
+          path="/admin/inventario" 
+          element={
+            <ProtectedRoute>
+              <InventoryMgr />
+            </ProtectedRoute>
+          } 
+        />
+
+        {/* --- RUTA POR DEFECTO (404) --- */}
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

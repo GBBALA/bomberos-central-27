@@ -1,0 +1,1 @@
+export default function InventoryMgr() { return <h1>Gestor de Inventario (Privado)</h1>; }

@@ -1,0 +1,1 @@
+export default function InventoryGallery() { return <h1>Galería Inventario</h1>; }
