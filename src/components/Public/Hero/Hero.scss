@@ -1,0 +1,89 @@
+@import '../../../styles/variables';
+
+.hero {
+  position: relative;
+  height: 90vh; // Ocupa casi toda la pantalla
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  // Imagen de fondo con filtro oscuro integrado
+  background: 
+    linear-gradient(rgba(26, 43, 73, 0.7), rgba(26, 43, 73, 0.8)),
+    url('https://images.unsplash.com/photo-1516008801550-d4d1421f6424?q=80&w=1920&auto=format&fit=crop'); 
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; // Efecto Parallax
+
+  &__content {
+    max-width: 800px;
+    padding: 20px;
+    animation: fadeInUp 1s ease-out;
+  }
+
+  h1 {
+    font-size: 3.5rem;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    font-weight: 800;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+
+    span {
+      display: block;
+      color: $color-secondary; // Dorado
+      font-size: 1.5rem;
+      margin-top: 10px;
+      font-weight: 400;
+      letter-spacing: 2px;
+    }
+  }
+
+  p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    .btn {
+      padding: 15px 30px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: transform 0.2s, background 0.3s;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+
+      &--primary {
+        background-color: $color-primary;
+        color: white;
+        &:hover { background-color: darken($color-primary, 10%); }
+      }
+
+      &--outline {
+        border: 2px solid white;
+        color: white;
+        &:hover { background-color: white; color: $color-dark; }
+      }
+    }
+  }
+
+  // Animación de entrada
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  // Mobile adjustments
+  @media (max-width: 768px) {
+    h1 { font-size: 2.2rem; span { font-size: 1rem; } }
+    height: 80vh;
+  }
+}

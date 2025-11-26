@@ -1,0 +1,96 @@
+@import '../../../styles/variables';
+
+.gallery-section {
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+
+  h2 {
+    font-size: 2.5rem;
+    color: $color-dark;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  p.subtitle {
+    color: $color-text-light;
+    margin-bottom: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.gallery-grid {
+  display: grid;
+  // Magia Responsive: Crea columnas de mínimo 300px automáticamente
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.vehicle-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden; // Para que la imagen no se salga de las esquinas redondeadas
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: left;
+  border-bottom: 4px solid $color-primary; // Detalle rojo abajo
+
+  &:hover {
+    transform: translateY(-5px); // Se levanta un poco
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  }
+
+  &__image-container {
+    height: 200px;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; // Recorta la imagen para llenar el espacio sin deformar
+      transition: transform 0.5s;
+    }
+  }
+
+  &:hover img {
+    transform: scale(1.1); // Zoom suave en la foto al pasar el mouse
+  }
+
+  &__content {
+    padding: 1.5rem;
+
+    h3 {
+      font-size: 1.2rem;
+      color: $color-dark;
+      margin-bottom: 0.5rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      background-color: #f0f2f5;
+      color: $color-text-light;
+    }
+    
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: $color-text-light;
+      margin-top: 0.5rem;
+      border-top: 1px solid #eee;
+      padding-top: 10px;
+    }
+  }
+}

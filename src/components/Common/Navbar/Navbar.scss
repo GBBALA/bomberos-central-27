@@ -1,0 +1,66 @@
+@import '../../../styles/variables';
+
+.navbar {
+  background-color: $color-dark;
+  color: white;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__logo {
+    font-size: 1.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    
+    span { color: $color-primary; }
+  }
+
+  &__menu {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+
+    a {
+      font-weight: 500;
+      transition: color 0.3s;
+      
+      &:hover { color: $color-secondary; }
+      
+      &.active { color: $color-secondary; border-bottom: 2px solid $color-secondary; }
+    }
+  }
+
+  .btn-logout {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    
+    &:hover { background: rgba(255,255,255,0.1); }
+  }
+
+  .admin-badge {
+    background-color: $color-secondary;
+    color: $color-dark;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    margin-right: 10px;
+    text-transform: uppercase;
+  }
+}
