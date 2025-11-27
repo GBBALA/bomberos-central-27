@@ -23,6 +23,15 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
+      <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '15px', textDecoration: 'none' }}>
+  {/* LOGO IMAGEN */}
+  <img src="/logo.png" alt="Escudo" style={{ height: '50px', width: 'auto' }} />
+  
+  <div style={{ display: 'flex', flexDirection: 'column' }}>
+    <span style={{ fontSize: '1.2rem', fontWeight: '900', color: 'white', letterSpacing: '1px', lineHeight: '1' }}>BOMBEROS</span>
+    <span style={{ fontSize: '0.9rem', color: '#FFD700', fontWeight: '500' }}>CENTRAL 27</span>
+  </div>
+</Link>
       <div className="navbar__container">
         <Link to="/" className="navbar__logo">
           Bomberos <span>Central 27</span>

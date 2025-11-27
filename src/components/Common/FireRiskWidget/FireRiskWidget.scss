@@ -1,0 +1,76 @@
+@import '../../../styles/variables';
+
+.risk-widget {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  border: 1px solid #eee;
+  position: relative;
+  overflow: hidden;
+
+  // Barra lateral de color según estado
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 6px; height: 100%;
+    background: #ccc; // Default
+  }
+
+  &.risk-Bajo::before { background: #10b981; } // Verde
+  &.risk-Medio::before { background: #f59e0b; } // Amarillo
+  &.risk-Alto::before { background: #f97316; } // Naranja
+  &.risk-Extremo::before { background: #ef4444; } // Rojo
+
+  h3 {
+    margin-bottom: 1.5rem;
+    color: #334155;
+    font-weight: 800;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+  }
+}
+
+.gauge-container {
+  display: flex;
+  gap: 5px;
+  height: 40px;
+  margin-bottom: 1rem;
+  
+  .gauge-segment {
+    flex: 1;
+    background: #e2e8f0;
+    border-radius: 4px;
+    transition: all 0.5s ease;
+    
+    // Colores inactivos
+    &:nth-child(1) { border-bottom: 4px solid #10b981; }
+    &:nth-child(2) { border-bottom: 4px solid #f59e0b; }
+    &:nth-child(3) { border-bottom: 4px solid #f97316; }
+    &:nth-child(4) { border-bottom: 4px solid #ef4444; }
+  }
+
+  // Estados Activos (Se iluminan)
+  &.level-Bajo .gauge-segment:nth-child(1) { background: #10b981; box-shadow: 0 0 10px #10b981; transform: scaleY(1.2); }
+  &.level-Medio .gauge-segment:nth-child(2) { background: #f59e0b; box-shadow: 0 0 10px #f59e0b; transform: scaleY(1.2); }
+  &.level-Alto .gauge-segment:nth-child(3) { background: #f97316; box-shadow: 0 0 10px #f97316; transform: scaleY(1.2); }
+  &.level-Extremo .gauge-segment:nth-child(4) { background: #ef4444; box-shadow: 0 0 15px #ef4444; transform: scaleY(1.2); }
+}
+
+.current-status {
+  font-size: 2rem;
+  font-weight: 900;
+  margin: 10px 0;
+  
+  &.text-Bajo { color: #10b981; }
+  &.text-Medio { color: #f59e0b; }
+  &.text-Alto { color: #f97316; }
+  &.text-Extremo { color: #ef4444; }
+}
+
+.risk-advice {
+  color: #64748b;
+  font-size: 0.9rem;
+  font-style: italic;
+}
