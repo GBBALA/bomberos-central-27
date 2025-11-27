@@ -6,42 +6,27 @@ const NewsFeed = () => {
   const encodedUrl = encodeURIComponent(fbPage);
 
   return (
-    <div style={{ 
-      background: 'white', 
-      padding: '1.5rem', 
-      borderRadius: '16px', 
-      boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-      height: '100%',
-      minHeight: '400px'
-    }}>
-      <h3 style={{ 
-        marginBottom: '1.5rem', 
-        color: '#1e293b', 
-        fontWeight: '800', 
-        fontSize: '1.2rem',
-        textAlign: 'center',
-        borderBottom: '2px solid #eee',
-        paddingBottom: '10px'
-      }}>
-        Novedades del Cuartel
-      </h3>
-      
-      <div style={{ width: '100%', overflow: 'hidden', borderRadius: '8px' }}>
-        <iframe 
-          src={`https://www.facebook.com/plugins/page.php?href=${encodedUrl}&tabs=timeline&width=340&height=500&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId`}
-          width="100%" 
-          height="500" 
-          style={{ border: 'none', overflow: 'hidden' }} 
-          scrolling="no" 
-          frameBorder="0" 
-          allowFullScreen={true} 
-          allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-        ></iframe>
-      </div>
-      <div style={{textAlign: 'center', marginTop: '10px'}}>
-        <a href={fbPage} target="_blank" style={{color: '#3b82f6', textDecoration: 'none', fontSize: '0.9rem'}}>Ver en Facebook &rarr;</a>
-      </div>
-    </div>
+    // ... dentro del return ...
+<div style={{ 
+  background: 'white', 
+  padding: '2rem',         // Más padding
+  borderRadius: '16px', 
+  boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
+  border: '1px solid #e2e8f0'
+}}>
+  {/* Quitamos el título de aquí porque ya lo pusimos en el App.jsx */}
+  
+  <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+    <iframe 
+      src={`https://www.facebook.com/plugins/page.php?href=${encodedUrl}&tabs=timeline&width=500&height=600&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId`}
+      width="500"  // Más ancho (antes 340)
+      height="600" // Más alto (antes 500)
+      // ... resto de propiedades ...
+    ></iframe>
+  </div>
+  
+  {/* ... botón ver en facebook ... */}
+</div>
   );
 };
 

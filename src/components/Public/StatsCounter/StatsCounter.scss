@@ -1,0 +1,53 @@
+@import '../../../styles/variables';
+
+.stats-section {
+  position: relative;
+  margin-top: -50px; // Para que se monte un poco sobre el Hero
+  z-index: 10;
+  padding: 0 1rem;
+  margin-bottom: 4rem;
+}
+
+.stats-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.stat-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+  border-bottom: 4px solid $color-primary; // Línea roja abajo
+
+  &:hover {
+    transform: translateY(-10px);
+  }
+
+  .icon-wrapper {
+    font-size: 3rem;
+    color: $color-primary;
+    margin-bottom: 1rem;
+  }
+
+  .stat-number {
+    font-size: 3rem;
+    font-weight: 900;
+    color: $color-primary;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-label {
+    font-size: 1rem;
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+}

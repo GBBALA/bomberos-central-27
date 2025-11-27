@@ -9,6 +9,7 @@ import InventoryGallery from './components/Public/InventoryGallery/InventoryGall
 import Footer from './components/Common/Footer/Footer';
 import FireRiskWidget from './components/Common/FireRiskWidget/FireRiskWidget';
 import NewsFeed from './components/Public/NewsFeed/NewsFeed';
+import StatsCounter from './components/Public/StatsCounter/StatsCounter'; // Nuevo
 
 // --- Componentes Admin (Privados) ---
 import Login from './components/Admin/Login/Login';
@@ -27,41 +28,63 @@ function App() {
             RUTAS PÚBLICAS
            ========================================= */}
         
-        {/* HOME: Hero + Widgets + Inventario + Footer */}
-        <Route path="/" element={
-          <>
-            <Hero />
-            
-            {/* Sección de Comunidad (Widgets) */}
-            <div style={{ 
-              maxWidth: '1200px', 
-              margin: '0 auto', 
-              padding: '2rem 1rem', 
-              display: 'flex', 
-              flexWrap: 'wrap', 
-              gap: '2rem', 
-              justifyContent: 'center',
-              alignItems: 'flex-start' // Alineación superior para que queden parejos
-            }}>
-              {/* Widget 1: Riesgo de Incendio */}
-              <div style={{ flex: '1', minWidth: '300px', maxWidth: '400px' }}>
-                <FireRiskWidget nivel="Alto" /> {/* Ajustable: Bajo | Moderado | Alto | Extremo */}
-              </div>
+      // ... imports existentes ...
+// Asegúrate de tener importado FireRiskWidget y NewsFeed
 
-              {/* Widget 2: Noticias Facebook */}
-              <div style={{ flex: '1', minWidth: '300px', maxWidth: '400px' }}>
-                 <NewsFeed />
-              </div>
-            </div>
+// ... Dentro del Route path="/" ...
+<Route path="/" element={
+  <>
+    {/* 1. HERO */}
+    <Hero />
+    
+    {/* 2. ESTADÍSTICAS (Flotando sobre el Hero) */}
+    <StatsCounter />
 
-            {/* Galería de Fotos */}
-            <InventoryGallery />
-            
-            {/* Pie de Página */}
-            <Footer />
-          </>
-        } />
+    {/* 3. SECCIÓN RIESGO DE INCENDIO (Dedicada) */}
+    <section style={{ 
+      maxWidth: '800px', 
+      margin: '0 auto 4rem', 
+      padding: '0 1rem' 
+    }}>
+      <h2 style={{ 
+        textAlign: 'center', 
+        color: '#334155', 
+        fontSize: '1.8rem', 
+        marginBottom: '1.5rem',
+        textTransform: 'uppercase'
+      }}>
+        Estado de Alerta
+      </h2>
+      <FireRiskWidget nivel="Alto" />
+    </section>
 
+    {/* 4. SECCIÓN NOTICIAS (Ancho completo con fondo suave) */}
+    <section style={{ 
+      backgroundColor: '#f8fafc', // Fondo gris muy suave para separar
+      padding: '4rem 1rem',
+      marginBottom: '2rem'
+    }}>
+      <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+        <h2 style={{ 
+          textAlign: 'center', 
+          color: '#1A2B49', 
+          fontSize: '2rem', 
+          marginBottom: '2rem' 
+        }}>
+          Novedades Institucionales
+        </h2>
+        {/* El NewsFeed ocupará el centro */}
+        <NewsFeed />
+      </div>
+    </section>
+
+    {/* 5. FLOTA Y EQUIPAMIENTO */}
+    <InventoryGallery />
+    
+    {/* 6. FOOTER */}
+    <Footer />
+  </>
+} />
         {/* INSCRIPCIÓN: Formulario + Footer */}
         <Route path="/inscripcion" element={
           <>

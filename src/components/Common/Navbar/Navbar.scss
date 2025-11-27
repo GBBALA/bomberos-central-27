@@ -1,66 +1,127 @@
 @import '../../../styles/variables';
 
 .navbar {
-  background-color: $color-dark;
-  color: white;
-  padding: 1rem 2rem;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  background-color: $color-dark; // Azul oscuro #1A2B49
+  height: 90px;
+  width: 100%;
   position: sticky;
   top: 0;
   z-index: 1000;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  font-family: 'Roboto', sans-serif;
 
   &__container {
     max-width: 1200px;
+    width: 100%;
+    height: 100%;
     margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    padding: 0 2rem;
+    display: flex;             // Activar Flexbox
+    justify-content: space-between; // Elementos a los extremos
+    align-items: center;       // Centrado vertical
   }
 
-  &__logo {
-    font-size: 1.5rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    
-    span { color: $color-primary; }
-  }
-
-  &__menu {
+  /* --- LOGO (Izquierda) --- */
+  .nav-brand {
     display: flex;
-    gap: 20px;
     align-items: center;
+    gap: 15px;
+    text-decoration: none;
+    user-select: none;
 
-    a {
-      font-weight: 500;
-      transition: color 0.3s;
-      
-      &:hover { color: $color-secondary; }
-      
-      &.active { color: $color-secondary; border-bottom: 2px solid $color-secondary; }
+    img {
+      height: 60px;
+      width: auto;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+
+      h1 {
+        color: white;
+        font-size: 1.5rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        margin: 0;
+        letter-spacing: 1px;
+      }
+
+      span {
+        color: $color-secondary; // Dorado #FFD700
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 2px;
+      }
     }
   }
 
-  .btn-logout {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.3);
-    color: white;
-    padding: 5px 15px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 0.8rem;
-    
-    &:hover { background: rgba(255,255,255,0.1); }
+  /* --- ENLACES (Derecha) --- */
+  .nav-links {
+    display: flex;
+    gap: 2rem; // Espacio entre botones
+    align-items: center;
+
+    a {
+      color: #e2e8f0; // Blanco suave
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      position: relative;
+
+      &:hover {
+        color: $color-secondary; // Dorado al pasar mouse
+      }
+
+      // Efecto de línea abajo al pasar mouse
+      &::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -5px;
+        left: 0;
+        background-color: $color-secondary;
+        transition: width 0.3s;
+      }
+
+      &:hover::after {
+        width: 100%;
+      }
+    }
+
+    // Botón especial para Login
+    .btn-access {
+      background-color: transparent;
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 8px 20px;
+      border-radius: 30px;
+      
+      &:hover {
+        background-color: white;
+        color: $color-dark;
+        border-color: white;
+        &::after { width: 0; } // Sin linea abajo
+      }
+    }
   }
 
-  .admin-badge {
-    background-color: $color-secondary;
-    color: $color-dark;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 0.7rem;
-    font-weight: bold;
-    margin-right: 10px;
-    text-transform: uppercase;
+  /* --- MENU MOVIL --- */
+  .mobile-icon {
+    display: none;
+    color: white;
+    font-size: 1.8rem;
+    cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    .nav-links {
+      display: none; // Ocultar en celular (aquí iría la lógica del menú hamburguesa)
+    }
+    .mobile-icon { display: block; }
   }
 }
