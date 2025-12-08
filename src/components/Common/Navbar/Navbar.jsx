@@ -1,16 +1,26 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import './Navbar.scss';
 
 const Navbar = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/login');
+    } catch (error) {
+      console.error("Error al salir", error);
+    }
+  };
 
   return (
     <nav className="navbar">
       <div className="navbar__container">
         
-        {/* LADO IZQUIERDO: LOGO */}
+        {/* LOGO */}
         <Link to="/" className="nav-brand">
           <img src="/logo.png" alt="Escudo" />
           <div className="brand-text">
@@ -19,16 +29,36 @@ const Navbar = () => {
           </div>
         </Link>
 
-        {/* LADO DERECHO: ENLACES */}
+        {/* ENLACES */}
         <div className="nav-links">
-          <Link to="/">Inicio</Link>
-          <Link to="/inscripcion">Quiero ser Bombero</Link>
           
           {user ? (
-            <Link to="/admin/dashboard" style={{color: '#FFD700'}}>Panel Admin</Link>
+            // --- MENÚ DE ADMINISTRADOR ---
+            <>
+              <span style={{color:'#FFD700', fontWeight:'bold', marginRight:'10px', background:'#333', padding:'5px 10px', borderRadius:'4px', fontSize:'0.8rem'}}>
+                MODO ADMIN
+              </span>
+              <Link to="/admin/dashboard">Aspirantes</Link>
+              <Link to="/admin/inventario">Inventario</Link>
+              <Link to="/admin/personal">Cuerpo Activo</Link> {/* NUEVO */}
+              <button 
+                onClick={handleLogout} 
+                className="btn-access"
+                style={{borderColor: '#dc3545', color: '#ffadad'}}
+
+              >
+                Salir
+              </button>
+            </>
           ) : (
-            <Link to="/login" className="btn-access">Acceso</Link>
+            // --- MENÚ PÚBLICO ---
+            <>
+              <Link to="/">Inicio</Link>
+              <Link to="/inscripcion">Quiero ser Bombero</Link>
+              <Link to="/login" className="btn-access">Acceso</Link>
+            </>
           )}
+
         </div>
       </div>
     </nav>

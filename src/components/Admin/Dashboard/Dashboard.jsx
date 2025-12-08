@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
+import { FaTrash, FaEdit } from 'react-icons/fa'; // Importamos iconos
 import { supabase } from '../../../config/supabaseClient';
 import './Dashboard.scss';
 
@@ -7,60 +8,65 @@ const Dashboard = () => {
   const [aspirantes, setAspirantes] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 1. Función para cargar datos
   const fetchAspirantes = async () => {
     try {
       const { data, error } = await supabase
         .from('aspirantes')
         .select('*')
-        .order('created_at', { ascending: false }); // Los más nuevos primero
+        .order('created_at', { ascending: false });
 
       if (error) throw error;
       setAspirantes(data);
     } catch (error) {
-      console.error('Error cargando aspirantes:', error);
-      Swal.fire('Error', 'No se pudieron cargar los datos', 'error');
+      console.error(error);
     } finally {
       setLoading(false);
     }
   };
 
-  // 2. Cargar al iniciar
   useEffect(() => {
     fetchAspirantes();
   }, []);
 
-  // 3. Manejar cambio de estado
   const handleStatusChange = async (id, newStatus) => {
+    /* ... (Mantén tu lógica actual de cambio de estado aquí) ... */
     try {
-      const { error } = await supabase
-        .from('aspirantes')
-        .update({ estado: newStatus })
-        .eq('id', id);
+      await supabase.from('aspirantes').update({ estado: newStatus }).eq('id', id);
+      setAspirantes(prev => prev.map(i => i.id === id ? { ...i, estado: newStatus } : i));
+      const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 });
+      Toast.fire({ icon: 'success', title: 'Estado actualizado' });
+    } catch (e) { console.error(e); }
+  };
 
-      if (error) throw error;
+  // --- NUEVA FUNCIÓN: ELIMINAR ---
+  const handleDelete = async (id, nombre) => {
+    const result = await Swal.fire({
+      title: `¿Eliminar a ${nombre}?`,
+      text: "Esta acción no se puede deshacer.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    });
 
-      // Actualizar estado local visualmente sin recargar
-      setAspirantes(prev => prev.map(item => 
-        item.id === id ? { ...item, estado: newStatus } : item
-      ));
+    if (result.isConfirmed) {
+      try {
+        const { error } = await supabase.from('aspirantes').delete().eq('id', id);
+        if (error) throw error;
 
-      const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000
-      });
-      Toast.fire({ icon: 'success', title: 'Estado actualizado correctamente' });
-
-    } catch (error) {
-      console.error('Error actualizando:', error);
-      Swal.fire('Error', 'No se pudo actualizar el estado', 'error');
+        // Actualizar tabla visualmente
+        setAspirantes(prev => prev.filter(item => item.id !== id));
+        
+        Swal.fire('Eliminado', 'La solicitud ha sido borrada.', 'success');
+      } catch (error) {
+        Swal.fire('Error', 'No se pudo eliminar el registro.', 'error');
+      }
     }
   };
 
-  // Renderizado
-  if (loading) return <div className="dashboard-container"><p>Cargando panel...</p></div>;
+  if (loading) return <div className="dashboard-container"><p>Cargando...</p></div>;
 
   return (
     <div className="dashboard-container">
@@ -71,34 +77,28 @@ const Dashboard = () => {
           <thead>
             <tr>
               <th>Fecha</th>
-              <th>Nombre Completo</th>
+              <th>Nombre</th>
               <th>DNI</th>
               <th>Contacto</th>
-              <th>Estado Actual</th>
-              <th>Acciones</th>
+              <th>Estado</th>
+              <th>Acciones</th> {/* Columna Acciones */}
             </tr>
           </thead>
           <tbody>
             {aspirantes.length === 0 ? (
-              <tr>
-                <td colSpan="6" className="empty-state">No hay aspirantes registrados aún.</td>
-              </tr>
+              <tr><td colSpan="6" className="empty-state">Sin datos.</td></tr>
             ) : (
               aspirantes.map((asp) => (
                 <tr key={asp.id}>
                   <td>{new Date(asp.created_at).toLocaleDateString()}</td>
                   <td>{asp.nombre} {asp.apellido}</td>
                   <td>{asp.dni}</td>
+                  <td>{asp.telefono}</td>
                   <td>
-                    {asp.telefono}<br/>
-                    <small>{asp.email}</small>
+                    <span className={`status-badge ${asp.estado.toLowerCase()}`}>{asp.estado}</span>
                   </td>
-                  <td>
-                    <span className={`status-badge ${asp.estado.toLowerCase()}`}>
-                      {asp.estado}
-                    </span>
-                  </td>
-                  <td>
+                  <td style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                    {/* Selector de Estado */}
                     <select 
                       className="status-select"
                       value={asp.estado}
@@ -109,6 +109,15 @@ const Dashboard = () => {
                       <option value="Aprobado">Aprobado</option>
                       <option value="Rechazado">Rechazado</option>
                     </select>
+
+                    {/* BOTÓN ELIMINAR */}
+                    <button 
+                      onClick={() => handleDelete(asp.id, asp.apellido)}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#dc3545', fontSize: '1.2rem' }}
+                      title="Eliminar Solicitud"
+                    >
+                      <FaTrash />
+                    </button>
                   </td>
                 </tr>
               ))

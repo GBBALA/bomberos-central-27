@@ -1,0 +1,93 @@
+@import '../../../styles/variables';
+
+.personnel-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+
+  h2 {
+    color: $color-dark;
+    border-bottom: 3px solid $color-primary;
+    display: inline-block;
+    margin-bottom: 2rem;
+  }
+}
+
+.personnel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.bombero-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  transition: transform 0.2s;
+  border-top: 5px solid #ccc;
+
+  &:hover { transform: translateY(-5px); }
+
+  // Colores según rango (decorativo)
+  &.rango-Jefatura { border-top-color: $color-primary; }
+  &.rango-Oficial { border-top-color: $color-secondary; }
+  &.rango-Bombero { border-top-color: $color-dark; }
+
+  img.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #f0f2f5;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+
+  h3 { margin: 0; color: $color-dark; font-size: 1.1rem; }
+  .rango { font-size: 0.9rem; color: $color-primary; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; }
+  .legajo { font-size: 0.8rem; color: #777; margin-bottom: 1rem; }
+
+  .info-extra {
+    width: 100%;
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .actions {
+    display: flex;
+    gap: 10px;
+    button {
+      background: none;
+      border: 1px solid #ddd;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      &:hover { background: #eee; }
+      &.btn-delete { color: #dc3545; border-color: #dc3545; &:hover { background: #fff5f5; } }
+    }
+  }
+}
+
+// Formulario Modal (Reutilizamos estilos o definimos simples)
+.modal-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 2000;
+}
+.modal-content {
+  background: white; padding: 2rem; border-radius: 8px; width: 90%; max-width: 500px;
+  max-height: 90vh; overflow-y: auto;
+}

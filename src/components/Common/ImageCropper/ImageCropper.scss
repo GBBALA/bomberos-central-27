@@ -1,0 +1,55 @@
+.cropper-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cropper-container {
+  background: white;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.cropper-area {
+  position: relative;
+  height: 400px;
+  background: #333;
+}
+
+.cropper-controls {
+  padding: 1.5rem;
+  background: white;
+
+  label { font-weight: bold; color: #555; display: block; margin-bottom: 5px; }
+
+  .zoom-range {
+    width: 100%;
+    margin-bottom: 1.5rem;
+    cursor: pointer;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+
+    button {
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-cancel { background: #eee; color: #333; }
+    .btn-save { background: #1A2B49; color: white; }
+  }
+}

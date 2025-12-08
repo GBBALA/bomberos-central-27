@@ -16,6 +16,8 @@ import Login from './components/Admin/Login/Login';
 import Dashboard from './components/Admin/Dashboard/Dashboard';
 import InventoryMgr from './components/Admin/InventoryMgr/InventoryMgr';
 import ProtectedRoute from './components/Admin/ProtectedRoute';
+import PersonnelMgr from './components/Admin/PersonnelMgr/PersonnelMgr';
+
 
 function App() {
   return (
@@ -118,6 +120,16 @@ function App() {
             </ProtectedRoute>
           } 
         />
+        <Route 
+          path="/admin/personal" 
+          element={
+             <ProtectedRoute>
+              <PersonnelMgr />
+            </ProtectedRoute>
+       } 
+        />
+
+        
 
         {/* =========================================
             MANEJO DE ERRORES (404)
