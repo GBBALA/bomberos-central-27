@@ -1,62 +1,142 @@
 @import '../../../styles/variables';
 
-.risk-widget-modern {
+.risk-widget-container {
   background: white;
-  padding: 2rem;
+  padding: 1.5rem;
   border-radius: 20px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.08);
   text-align: center;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  max-width: 450px;
+  margin: 0 auto;
+  font-family: 'Arial', sans-serif;
 
   h3 {
+    text-transform: uppercase;
+    color: #ce1126;
+    font-weight: 900;
     font-size: 1.5rem;
-    color: $color-dark;
     margin-bottom: 2rem;
-    font-weight: 800;
+    letter-spacing: 1px;
+  }
+}
+
+/* --- EL CONTENEDOR MÁSCARA (Recorta la mitad de abajo) --- */
+.gauge-mask {
+  width: 300px;
+  height: 150px; /* Exactamente la mitad del ancho */
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden; /* Esto es lo que corta el círculo */
+}
+
+/* --- EL CÍRCULO COMPLETO CON EL DEGRADADO --- */
+.gauge-body {
+  width: 300px;
+  height: 300px; /* Círculo perfecto */
+  border-radius: 50%;
+  box-sizing: border-box;
+  
+  /* 
+     Lógica: Empezamos a las 9 en punto (270deg).
+     Total arco visible: 180deg.
+     5 secciones -> 36deg cada una.
+  */
+  background: conic-gradient(from 270deg, 
+    #00a651 0deg 36deg,    /* Verde */
+    #003399 36deg 72deg,   /* Azul */
+    #fff200 72deg 108deg,  /* Amarillo */
+    #f7941d 108deg 144deg, /* Naranja */
+    #ed1c24 144deg 180deg, /* Rojo */
+    transparent 180deg     /* La mitad de abajo transparente */
+  );
+}
+
+/* --- LA AGUJA --- */
+.gauge-needle {
+  width: 6px;
+  height: 130px; /* Largo de la aguja */
+  background: #222;
+  position: absolute;
+  
+  /* Posicionamiento: El 'bottom' de la aguja debe estar en el 'bottom' de la máscara */
+  bottom: 0; 
+  left: 50%;
+  margin-left: -3px; /* Centrado */
+  
+  /* Forma de punta */
+  border-radius: 50% 50% 0 0;
+  
+  /* Pivote en la base */
+  transform-origin: bottom center;
+  transition: transform 0.8s cubic-bezier(0.4, 2.5, 0.5, 0.7); /* Rebote */
+  z-index: 10;
+}
+
+/* --- PUNTO CENTRAL (Tapa la base de la aguja) --- */
+.gauge-center-point {
+  width: 24px;
+  height: 12px; /* Semicírculo */
+  background: #222;
+  border-radius: 24px 24px 0 0;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+}
+
+/* --- TEXTOS Y CONTROLES --- */
+.status-text {
+  font-size: 2.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin-top: 1rem;
+  text-shadow: 1px 1px 0px rgba(0,0,0,0.1);
+
+  &.Bajo { color: #00a651; }
+  &.Moderado { color: #003399; }
+  &.Alto { color: #d4c600; } 
+  &.Muy_Alto { color: #f7941d; }
+  &.Extremo { color: #ed1c24; }
+}
+
+.risk-description {
+  color: #666;
+  font-size: 0.9rem;
+  font-style: italic;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.admin-panel {
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  margin-top: 10px;
+
+  h4 {
+    font-size: 0.7rem;
+    color: #999;
+    margin-bottom: 8px;
+    text-transform: uppercase;
   }
 
-  // Círculo indicador gigante
-  .risk-circle {
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    border: 10px solid #eee;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 2rem;
-    position: relative;
-    transition: all 0.5s ease;
+  .btn-container { display: flex; gap: 5px; }
 
-    &.Bajo { border-color: #10b981; color: #10b981; box-shadow: 0 0 30px rgba(16, 185, 129, 0.3); }
-    &.Medio { border-color: #f59e0b; color: #f59e0b; box-shadow: 0 0 30px rgba(245, 158, 11, 0.3); }
-    &.Alto { border-color: #f97316; color: #f97316; box-shadow: 0 0 30px rgba(249, 115, 22, 0.3); }
-    &.Extremo { border-color: #ef4444; color: #ef4444; box-shadow: 0 0 40px rgba(239, 68, 68, 0.4); animation: pulseRed 2s infinite; }
+  button {
+    flex: 1;
+    padding: 8px 0;
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    opacity: 0.4;
+    transition: 0.2s;
 
-    strong { font-size: 2.5rem; line-height: 1; }
-    span { font-size: 0.9rem; text-transform: uppercase; color: #999; }
-  }
-
-  .message-box {
-    background: #f8fafc;
-    padding: 1rem;
-    border-radius: 10px;
-    font-size: 0.95rem;
-    color: #475569;
-    border-left: 4px solid;
-    &.border-Bajo { border-color: #10b981; }
-    &.border-Extremo { border-color: #ef4444; }
-    // ... otros colores
-  }
-
-  @keyframes pulseRed {
-    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-    70% { box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    &:hover { opacity: 0.8; }
+    &.active { opacity: 1; transform: scale(1.05); box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
   }
 }
