@@ -9,7 +9,7 @@ const StatsCounter = () => {
         {/* Card 1 */}
         <div className="stat-card">
           <div className="icon-wrapper"><FaUserShield /></div>
-          <div className="stat-number">+25</div>
+          <div className="stat-number">+10</div>
           <div className="stat-label">Bomberos Activos</div>
         </div>
 

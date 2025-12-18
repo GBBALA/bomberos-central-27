@@ -177,10 +177,13 @@ const PersonnelMgr = () => {
                 <input placeholder="N° Legajo" {...register('legajo')} style={{padding:'10px'}} />
               </div>
               <select {...register('rango')} style={{padding:'10px'}}>
+                <option value="Aspirante">Aspirante</option>
                 <option value="Bombero">Bombero</option>
                 <option value="Suboficial">Suboficial</option>
                 <option value="Oficial">Oficial</option>
-                <option value="Jefatura">Jefatura</option>
+                <option value="Segundo Jefe">Segundo Jefe</option>
+                <option value="Jefe">Jefe</option>
+
               </select>
               <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'10px'}}>
                 <input placeholder="Grupo Sang." {...register('grupo_sanguineo')} style={{padding:'10px'}} />

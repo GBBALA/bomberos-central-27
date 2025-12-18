@@ -17,6 +17,7 @@ import Dashboard from './components/Admin/Dashboard/Dashboard';
 import InventoryMgr from './components/Admin/InventoryMgr/InventoryMgr';
 import ProtectedRoute from './components/Admin/ProtectedRoute';
 import PersonnelMgr from './components/Admin/PersonnelMgr/PersonnelMgr';
+import ShiftMgr from './components/Admin/ShiftMgr/ShiftMgr';
 
 
 function App() {
@@ -30,9 +31,6 @@ function App() {
             RUTAS PÚBLICAS
            ========================================= */}
         
-      // ... imports existentes ...
-// Asegúrate de tener importado FireRiskWidget y NewsFeed
-
 // ... Dentro del Route path="/" ...
 <Route path="/" element={
   <>
@@ -128,6 +126,15 @@ function App() {
             </ProtectedRoute>
        } 
         />
+      {/* 2. AGREGAR ESTA RUTA PARA QUE EL BOTÓN FUNCIONE: */}
+          <Route 
+            path="/admin/guardias" 
+            element={
+              <ProtectedRoute>
+                <ShiftMgr />
+              </ProtectedRoute>
+            } 
+          />
 
         
 

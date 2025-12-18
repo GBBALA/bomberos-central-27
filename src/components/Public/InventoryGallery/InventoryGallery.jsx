@@ -7,54 +7,50 @@ const InventoryGallery = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchPublicInventory = async () => {
+    const fetchFleet = async () => {
       try {
-        // Solo traemos lo que NO tiene fecha de baja (equipos activos)
         const { data, error } = await supabase
           .from('inventario')
           .select('*')
-          .is('fecha_baja', null) // Filtro mágico
-          .order('tipo', { ascending: false }); // Agrupa por tipo (Vehículos primero)
+          .is('fecha_baja', null) // Solo activos
+          .eq('categoria_macro', 'Movilidad') // <--- EL FILTRO CLAVE
+          .order('nombre');
 
         if (error) throw error;
         setVehicles(data);
       } catch (error) {
-        console.error('Error cargando galería:', error);
+        console.error('Error:', error);
       } finally {
         setLoading(false);
       }
     };
-
-    fetchPublicInventory();
+    fetchFleet();
   }, []);
 
-  if (loading) return <div style={{textAlign:'center', padding:'50px'}}>Cargando flota...</div>;
+  if (loading) return <p style={{textAlign:'center', padding:'2rem'}}>Cargando flota...</p>;
+  
+  if (vehicles.length === 0) return null; // Si no hay vehículos, no muestra nada
 
   return (
     <section className="gallery-section" id="nuestra-flota">
-      <h2>Nuestra Flota y Equipamiento</h2>
-      <p className="subtitle">
-        Conoce los recursos con los que cuenta la Central 27 para proteger a la comunidad de Buta Ranquil.
-      </p>
+      <h2>Parque Automotor</h2>
+      <p className="subtitle">Unidades operativas al servicio de la comunidad.</p>
 
       <div className="gallery-grid">
         {vehicles.map((item) => (
           <article className="vehicle-card" key={item.id}>
             <div className="vehicle-card__image-container">
-              {/* Fallback si no tiene imagen */}
               <img 
-                src={item.imagen_url || 'https://via.placeholder.com/400x300?text=Bomberos+Buta+Ranquil'} 
+                src={item.imagen_url || 'https://via.placeholder.com/400x300?text=Vehiculo'} 
                 alt={item.nombre} 
               />
             </div>
-            
             <div className="vehicle-card__content">
-              <span className="badge">{item.tipo}</span>
+              <span className="badge">{item.marca}</span>
               <h3>{item.nombre}</h3>
-              
               <div className="info-row">
-                <span>Cantidad: <strong>{item.cantidad}</strong></span>
-                <span>Origen: {item.origen}</span>
+                <span>Modelo: <strong>{item.modelo || '-'}</strong></span>
+                <span>Interno/Patente: {item.serial || '-'}</span>
               </div>
             </div>
           </article>

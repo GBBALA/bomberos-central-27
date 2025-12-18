@@ -41,6 +41,7 @@ const Navbar = () => {
               <Link to="/admin/dashboard">Aspirantes</Link>
               <Link to="/admin/inventario">Inventario</Link>
               <Link to="/admin/personal">Cuerpo Activo</Link> {/* NUEVO */}
+              <Link to="/admin/guardias">Guardias</Link>
               <button 
                 onClick={handleLogout} 
                 className="btn-access"
