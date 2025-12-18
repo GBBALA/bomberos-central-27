@@ -1,32 +1,42 @@
-@import '../../../styles/variables'; // Asegúrate de tener este archivo o usa colores directos si no lo creamos aún
+@import '../../../styles/variables';
 
 .login-container {
+  height: calc(100vh - 90px); // Restamos el navbar
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 80vh; // Casi toda la pantalla
-  background-color: #f0f2f5;
-  padding: 20px;
+  background: 
+    linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.9)),
+    url('https://images.unsplash.com/photo-1605218427306-0331d9990838?q=80&w=1920&auto=format&fit=crop'); 
+  background-size: cover;
+  background-position: center;
+  padding: 1rem;
 }
 
 .login-card {
-  background: white;
-  padding: 2.5rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  background: rgba(255, 255, 255, 0.1); // Vidrio
+  backdrop-filter: blur(15px);
+  padding: 3rem 2.5rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   width: 100%;
-  max-width: 400px;
+  max-width: 450px;
   text-align: center;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+  animation: fadeIn 0.5s ease-out;
 
   h2 {
-    color: #1A2B49; // Azul oscuro
-    margin-bottom: 0.5rem;
+    color: $color-white;
     font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
 
   p {
-    color: #666;
-    margin-bottom: 2rem;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 2.5rem;
+    font-size: 0.9rem;
   }
 }
 
@@ -36,28 +46,35 @@
 
   label {
     display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: #333;
+    color: $color-secondary;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    text-transform: uppercase;
   }
 
   input {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    padding: 14px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    color: white;
     font-size: 1rem;
-    transition: border-color 0.3s;
+    transition: all 0.3s;
 
     &:focus {
       outline: none;
-      border-color: #CE1126; // Rojo bomberos
+      background: rgba(255,255,255,0.2);
+      border-color: $color-secondary;
     }
+    
+    &::placeholder { color: rgba(255,255,255,0.4); }
   }
 
   .error-msg {
-    color: #CE1126;
-    font-size: 0.85rem;
+    color: #ff6b6b;
+    font-size: 0.8rem;
     margin-top: 5px;
     display: block;
   }
@@ -65,22 +82,30 @@
 
 .btn-login {
   width: 100%;
-  padding: 12px;
-  background-color: #CE1126;
+  padding: 14px;
+  background: linear-gradient(45deg, $color-primary, darken($color-primary, 10%));
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 50px;
   font-size: 1rem;
-  font-weight: bold;
+  font-weight: 800;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: transform 0.2s, box-shadow 0.3s;
+  box-shadow: 0 4px 15px rgba(206, 17, 38, 0.4);
 
   &:hover {
-    background-color: #a80e1f;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(206, 17, 38, 0.6);
   }
 
   &:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+    opacity: 0.7;
+    cursor: wait;
   }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }

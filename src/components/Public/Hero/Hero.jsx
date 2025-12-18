@@ -11,7 +11,6 @@ const Hero = () => {
           <span>BUTA RANQUIL - CENTRAL 27</span>
         </h1>
         <p>
-        Siempre listos para proteger a nuestra comunidad.
         </p>
         
         <div className="hero-btns">

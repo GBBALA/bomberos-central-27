@@ -1,10 +1,41 @@
 @import 'base/reset';
+@import 'variables';
 
-// Variables
-$primary: #CE1126;
-$dark: #1A2B49;
-
-// Aquí irán tus estilos globales
 body {
-  color: #333;
+  font-family: $font-body;
+  background-color: $color-light;
+  color: #334155; // Gris oscuro elegante para texto
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased; // Texto más nítido
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-heading;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: $transition-fast;
+}
+
+button {
+  font-family: $font-heading;
+}
+
+// Scrollbar personalizada (Toque premium)
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: $color-primary;
 }

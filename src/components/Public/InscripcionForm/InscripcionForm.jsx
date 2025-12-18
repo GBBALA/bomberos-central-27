@@ -4,25 +4,23 @@ import Swal from 'sweetalert2';
 import { supabase } from '../../../config/supabaseClient';
 import { uploadImageToCloudinary } from '../../../services/cloudinaryService';
 import './InscripcionForm.scss';
+import { FaUserPlus } from 'react-icons/fa';
 
 const InscripcionForm = () => {
   const { register, handleSubmit, reset, watch, formState: { errors } } = useForm();
   const [loading, setLoading] = useState(false);
 
- // Validación de Edad (+18 y > 1950)
+  // Validación de Edad (+18 y > 1950)
   const validateAge = (value) => {
     if (!value) return "Ingresa una fecha";
-    
     const today = new Date();
     const birthDate = new Date(value);
     const year = birthDate.getFullYear();
 
-    // 1. Validar año mínimo (Anti-error/troll)
     if (year < 1950) {
       return "Por favor ingresa un año de nacimiento válido (posterior a 1950).";
     }
 
-    // 2. Validar mayor de 18 años
     let age = today.getFullYear() - year;
     const m = today.getMonth() - birthDate.getMonth();
     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
@@ -35,21 +33,18 @@ const InscripcionForm = () => {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      // 1. Validar que subió las fotos
       if (!data.dni_frente[0] || !data.dni_dorso[0]) {
         throw new Error("Debes subir ambas fotos de tu DNI.");
       }
 
-      // 2. Subir imágenes a Cloudinary
       const urlFrente = await uploadImageToCloudinary(data.dni_frente[0]);
       const urlDorso = await uploadImageToCloudinary(data.dni_dorso[0]);
 
-      // 3. Guardar en Supabase
       const { error } = await supabase.from('aspirantes').insert([{
         nombre: data.nombre,
         apellido: data.apellido,
         dni: data.dni,
-        fecha_nacimiento: data.fecha_nacimiento, // Asegurate que esta columna exista en DB o agregala
+        fecha_nacimiento: data.fecha_nacimiento,
         email: data.email,
         telefono: data.telefono,
         direccion: data.direccion,
@@ -77,9 +72,18 @@ const InscripcionForm = () => {
   return (
     <section className="inscripcion-section">
       <div className="form-card">
+        {/* TÍTULO ÚNICO (El duplicado fue eliminado) */}
         <div className="form-card__header">
+          <div style={{
+            width: '60px', height: '60px', background: '#CE1126', borderRadius: '50%', 
+            margin: '0 auto 1rem auto', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 4px 10px rgba(206, 17, 38, 0.3)'
+          }}>
+            <FaUserPlus style={{color: 'white', fontSize: '1.5rem'}}/>
+          </div>
           <h2>Postulación a Aspirante</h2>
-          <p>Requisitos: Ser mayor de 18 años y residir en la localidad.</p>
+          <p>Únete al cuerpo activo de la Central 27</p>
+          REQUISITOS: SER MAYOR DE 18 AÑOS Y RESIDIR EN BUTA RANQUIL
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="form-grid">
@@ -107,7 +111,7 @@ const InscripcionForm = () => {
               type="date" 
               {...register("fecha_nacimiento", { 
                 required: "Requerido", 
-                validate: validateAge // Validación personalizada
+                validate: validateAge 
               })} 
             />
             {errors.fecha_nacimiento && <span className="error-msg">{errors.fecha_nacimiento.message}</span>}
@@ -128,20 +132,33 @@ const InscripcionForm = () => {
             <textarea {...register("direccion", { required: "Requerido" })}></textarea>
           </div>
 
-          {/* DOCUMENTACIÓN */}
+          {/* DOCUMENTACIÓN (Corregido para que no se salga) */}
           <div className="full-width" style={{marginTop:'1rem', borderTop:'1px solid #eee', paddingTop:'1rem'}}>
             <h4 style={{marginBottom:'10px', color:'#1A2B49'}}>Documentación (Obligatorio)</h4>
-            <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'1rem'}}>
+            <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(200px, 1fr))', gap:'1rem'}}>
+              
               <div className="input-group">
                 <label>Foto DNI (Frente)</label>
-                <input type="file" accept="image/*" {...register("dni_frente", { required: "Sube el frente del DNI" })} />
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  {...register("dni_frente", { required: "Sube el frente del DNI" })} 
+                  style={{ width: '100%', overflow: 'hidden' }} // CORRECCIÓN CSS
+                />
                 {errors.dni_frente && <span className="error-msg">{errors.dni_frente.message}</span>}
               </div>
+
               <div className="input-group">
                 <label>Foto DNI (Dorso)</label>
-                <input type="file" accept="image/*" {...register("dni_dorso", { required: "Sube el dorso del DNI" })} />
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  {...register("dni_dorso", { required: "Sube el dorso del DNI" })} 
+                  style={{ width: '100%', overflow: 'hidden' }} // CORRECCIÓN CSS
+                />
                 {errors.dni_dorso && <span className="error-msg">{errors.dni_dorso.message}</span>}
               </div>
+
             </div>
           </div>
 

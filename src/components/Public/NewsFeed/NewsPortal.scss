@@ -2,74 +2,97 @@
 
 .unified-news-section {
   font-family: 'Roboto', sans-serif;
-  max-width: 1200px;
+  width: 100%;
+  max-width: 1200px; // Ancho máximo para que no se estire infinito en monitores 4k
   margin: 0 auto;
 }
 
+/* TÍTULO PRINCIPAL */
 .section-title {
   text-align: center;
-  color: #1A2B49;
-  font-size: 2rem;
-  margin-bottom: 3rem;
+  color: $color-dark;
+  font-size: 2.5rem;
+  margin-bottom: 4rem;
   text-transform: uppercase;
-  font-weight: 800;
+  font-weight: 900;
   letter-spacing: 1px;
+  position: relative;
+
+  &::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 5px;
+    background: $color-primary;
+    margin: 15px auto 0;
+    border-radius: 2px;
+  }
 }
 
-/* LAYOUT PRINCIPAL: 2 Columnas */
+/* LAYOUT PRINCIPAL: COLUMNA ÚNICA (Uno arriba del otro) */
 .news-layout {
-  display: grid;
-  grid-template-columns: 2fr 1fr; /* Izquierda ocupa el doble que la derecha */
-  gap: 2rem;
-  align-items: start;
+  display: flex;
+  flex-direction: column; // Fuerza verticalidad
+  gap: 5rem; // Espacio generoso entre Noticias y Facebook
+}
 
-  @media (max-width: 900px) {
-    grid-template-columns: 1fr; /* En celular/tablet se pone uno abajo del otro */
-  }
+/* --- SECCIÓN 1: NOTICIAS PROPIAS (Arriba) --- */
+.internal-news-column {
+  width: 100%;
 }
 
 .column-title {
-  color: #CE1126;
-  font-size: 1.2rem;
-  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  color: $color-dark;
+  margin-bottom: 2rem;
+  font-weight: 800;
+  border-left: 6px solid $color-primary;
+  padding-left: 15px;
   text-transform: uppercase;
-  border-left: 4px solid #CE1126;
-  padding-left: 10px;
+  display: inline-block;
 }
 
-/* --- ESTILOS TARJETAS NOTICIAS (Izquierda) --- */
 .news-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
+  // Magia Responsive: Crea tantas columnas como entren, mínimo 300px cada una
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+  gap: 2rem;
 }
 
+/* TARJETA DE NOTICIA */
 .news-card {
   background: white;
-  border-radius: 12px;
+  border-radius: 16px; // Bordes más redondeados
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
   height: 100%;
-  border: 1px solid #f0f0f0;
+  cursor: pointer;
 
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+    border-color: rgba($color-primary, 0.3);
+
     .news-img { transform: scale(1.05); }
+    .read-more-btn { color: $color-primary; gap: 10px; }
   }
 
   .news-img-wrapper {
+    height: 220px;
     overflow: hidden;
-    height: 180px;
+    position: relative;
+    background-color: #f0f0f0;
   }
 
   .news-img {
-    width: 100%; height: 100%;
-    background-size: cover; background-position: center;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
     transition: transform 0.5s ease;
   }
 
@@ -77,42 +100,117 @@
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    flex: 1;
+    flex-grow: 1;
 
-    .date { font-size: 0.8rem; color: #888; text-transform: uppercase; font-weight: 500; margin-bottom: 5px; }
-    h4 { font-size: 1.1rem; color: #333; margin: 0 0 10px 0; font-weight: 700; line-height: 1.3; }
-    p { font-size: 0.9rem; color: #666; line-height: 1.5; margin-bottom: 1rem; flex: 1; }
-    
+    .date {
+      font-size: 0.8rem;
+      color: #888;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    h4 {
+      font-size: 1.3rem;
+      color: #1a2b49;
+      margin: 0 0 12px 0;
+      line-height: 1.3;
+      font-weight: 800;
+    }
+
+    p {
+      font-size: 1rem;
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+
     .read-more-btn {
-      background: none; border: none; color: #CE1126; font-weight: bold; text-transform: uppercase; padding: 0; cursor: pointer; font-size: 0.85rem;
-      &:hover { text-decoration: underline; }
+      background: none;
+      border: none;
+      padding: 0;
+      font-weight: 800;
+      color: #1a2b49;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &::after { content: '→'; font-size: 1.2rem; margin-top: -2px; }
     }
   }
 }
 
 .empty-message {
-  text-align: center; padding: 40px; background: white; border-radius: 12px; color: #666; font-style: italic; border: 1px dashed #ccc;
+  text-align: center;
+  padding: 4rem;
+  background: white;
+  border-radius: 12px;
+  color: #666;
+  border: 2px dashed #ddd;
+  font-size: 1.1rem;
 }
 
-/* --- ESTILOS FACEBOOK (Derecha) --- */
+/* --- SECCIÓN 2: FACEBOOK (Abajo) --- */
 .facebook-column {
-  /* Se hace sticky para que acompañe al scroll */
-  position: sticky;
-  top: 100px;
+  width: 100%;
+  display: flex;
+  justify-content: center; // Centrado horizontalmente
+  align-items: center;
 }
 
 .fb-container {
   background: white;
-  padding: 1.5rem;
+  padding: 0; /* QUITAMOS EL RELLENO INTERNO */
   border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-  border: 1px solid #e2e8f0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  box-shadow: 0 4px 25px rgba(0,0,0,0.08);
+  border-top: 6px solid #1877F2;
+  overflow: hidden;
+  
+  width: 100%;
+  max-width: 500px; /* Ancho exacto del plugin de Facebook para que no sobre espacio */
+  
+  h3 {
+    text-align: center;
+    font-size: 1.3rem;
+    color: #333;
+    margin: 0;
+    font-weight: 800;
+    border-bottom: 1px solid #eee;
+    padding: 1.5rem 1rem; /* Padding solo para el título */
+    background-color: #fcfcfc;
+  }
 }
 
 .fb-link {
-  color: #1877F2; text-decoration: none; font-weight: bold; font-size: 0.9rem;
-  &:hover { text-decoration: underline; }
+  display: block;
+  text-align: center;
+  padding: 1.5rem; /* Padding para el link de abajo */
+  color: #1877F2;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 1rem;
+  background-color: #fcfcfc;
+  border-top: 1px solid #eee;
+  
+  &:hover { text-decoration: underline; background-color: #f0f7ff; }
+}
+
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .section-title { font-size: 1.8rem; }
+  .column-title { font-size: 1.4rem; }
+  
+  .news-grid {
+    grid-template-columns: 1fr; // Una columna en celular
+  }
+  
+  .fb-container {
+    padding: 1rem;
+  }
 }

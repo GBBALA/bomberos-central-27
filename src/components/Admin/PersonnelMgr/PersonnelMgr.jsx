@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom'; // Importar para navegar al memorial
 import Swal from 'sweetalert2';
-import { FaPlus, FaEdit, FaTrash, FaCamera, FaPrint, FaCheckSquare, FaSquare } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaCamera, FaPrint, FaStar } from 'react-icons/fa';
 import { supabase } from '../../../config/supabaseClient';
 import { uploadImageToCloudinary } from '../../../services/cloudinaryService';
 import ImageCropper from '../../Common/ImageCropper/ImageCropper';
@@ -14,6 +15,7 @@ const PersonnelMgr = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate(); // Hook para redireccionar
   
   // Selección para Nómina
   const [selectedIds, setSelectedIds] = useState([]);
@@ -47,9 +49,6 @@ const PersonnelMgr = () => {
     if (selectedIds.length === bomberos.length) setSelectedIds([]);
     else setSelectedIds(bomberos.map(b => b.id));
   };
-
-  // ... (El resto de funciones openModal, onSubmit, etc. se mantienen igual) ...
-  // [Copia las funciones openModal, onFileChange, onCropComplete, onSubmit, deleteBombero del código anterior]
   
   const openModal = (bombero = null) => {
       setFinalImageFile(null); setTempImgSrc(null);
@@ -58,7 +57,7 @@ const PersonnelMgr = () => {
         setValue('nombre', bombero.nombre); setValue('apellido', bombero.apellido);
         setValue('dni', bombero.dni); setValue('legajo', bombero.legajo);
         setValue('rango', bombero.rango); setValue('grupo_sanguineo', bombero.grupo_sanguineo);
-        setValue('obra_social', bombero.obra_social); // Nuevo campo
+        setValue('obra_social', bombero.obra_social);
         setValue('telefono', bombero.telefono); setValue('estado', bombero.estado);
         setPreviewUrl(bombero.foto_url);
       } else {
@@ -67,31 +66,57 @@ const PersonnelMgr = () => {
       setShowModal(true);
   };
 
-  const onFileChange = async (e) => { if (e.target.files && e.target.files.length > 0) { const file = e.target.files[0]; const reader = new FileReader(); reader.addEventListener('load', () => { setTempImgSrc(reader.result); }); reader.readAsDataURL(file); } };
-  const onCropComplete = (croppedBlob) => { setFinalImageFile(croppedBlob); setPreviewUrl(URL.createObjectURL(croppedBlob)); setTempImgSrc(null); };
+  const onFileChange = async (e) => { 
+    if (e.target.files && e.target.files.length > 0) { 
+      const file = e.target.files[0]; 
+      const reader = new FileReader(); 
+      reader.addEventListener('load', () => { setTempImgSrc(reader.result); }); 
+      reader.readAsDataURL(file); 
+    } 
+  };
+
+  const onCropComplete = (croppedBlob) => { 
+    setFinalImageFile(croppedBlob); 
+    setPreviewUrl(URL.createObjectURL(croppedBlob)); 
+    setTempImgSrc(null); 
+  };
   
   const onSubmit = async (data) => {
       setLoading(true);
       try {
         let fotoUrl = null;
         if (finalImageFile) fotoUrl = await uploadImageToCloudinary(finalImageFile);
+        
         const payload = {
           nombre: data.nombre, apellido: data.apellido, dni: data.dni, legajo: data.legajo,
           rango: data.rango, grupo_sanguineo: data.grupo_sanguineo, obra_social: data.obra_social,
           telefono: data.telefono, estado: data.estado,
           ...(fotoUrl && { foto_url: fotoUrl })
         };
-        if (editingId) { await supabase.from('bomberos').update(payload).eq('id', editingId); Swal.fire('Actualizado', '', 'success'); }
-        else { 
+
+        if (editingId) { 
+          await supabase.from('bomberos').update(payload).eq('id', editingId); 
+          Swal.fire('Actualizado', '', 'success'); 
+        } else { 
             if (!fotoUrl) payload.foto_url = "https://via.placeholder.com/150?text=Bombero";
-            await supabase.from('bomberos').insert([payload]); Swal.fire('Registrado', '', 'success'); 
+            await supabase.from('bomberos').insert([payload]); 
+            Swal.fire('Registrado', '', 'success'); 
         }
         setShowModal(false); fetchBomberos();
-      } catch (error) { console.error(error); Swal.fire('Error', error.message, 'error'); } 
-      finally { setLoading(false); }
+      } catch (error) { 
+        console.error(error); 
+        Swal.fire('Error', error.message, 'error'); 
+      } finally { 
+        setLoading(false); 
+      }
   };
-  const deleteBombero = async (id) => { const res = await Swal.fire({ title: '¿Baja?', icon: 'warning', showCancelButton: true }); if (res.isConfirmed) { await supabase.from('bomberos').delete().eq('id', id); fetchBomberos(); } };
 
+  const deleteBombero = async (id) => { 
+    const res = await Swal.fire({ title: '¿Baja?', icon: 'warning', showCancelButton: true }); 
+    if (res.isConfirmed) { 
+      await supabase.from('bomberos').delete().eq('id', id); fetchBomberos(); 
+    } 
+  };
 
   return (
     <div className="personnel-container">
@@ -104,6 +129,18 @@ const PersonnelMgr = () => {
         </div>
         
         <div style={{ display: 'flex', gap: '10px' }}>
+          {/* BOTÓN IR A MEMORIAL */}
+          <button 
+            onClick={() => navigate('/admin/memorial')}
+            style={{
+              background: '#333', color: '#FFD700', border: '1px solid #FFD700', 
+              padding: '10px 20px', borderRadius: '30px', cursor: 'pointer', 
+              fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px'
+            }}
+          >
+            <FaStar /> Gestionar Memorial
+          </button>
+
           <button 
             onClick={handlePrint}
             style={{
@@ -112,7 +149,7 @@ const PersonnelMgr = () => {
               fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px'
             }}
           >
-            <FaPrint /> Generar Nómina ({selectedIds.length})
+            <FaPrint /> Nómina ({selectedIds.length})
           </button>
 
           <button className="btn-add" onClick={() => openModal()} style={{background:'#CE1126', color:'white', border:'none', padding:'10px 20px', borderRadius:'30px', cursor:'pointer', fontWeight:'bold', display:'flex', alignItems:'center', gap:'10px'}}>
@@ -123,7 +160,7 @@ const PersonnelMgr = () => {
 
       <div className="personnel-grid">
         {bomberos.map(b => (
-          // Tarjeta con checkbox
+          // Tarjeta limpia sin emojis
           <div key={b.id} 
                className={`bombero-card rango-${b.rango?.split(' ')[0] || 'Bombero'}`}
                style={{border: selectedIds.includes(b.id) ? '2px solid #1890ff' : '', background: selectedIds.includes(b.id) ? '#f0f9ff' : ''}}
@@ -133,18 +170,25 @@ const PersonnelMgr = () => {
                 type="checkbox" 
                 checked={selectedIds.includes(b.id)} 
                 onChange={() => toggleSelect(b.id)} 
-                style={{width:'20px', height:'20px', cursor:'pointer'}}
+                style={{width:'18px', height:'18px', cursor:'pointer'}}
               />
             </div>
 
             <img src={b.foto_url} alt="Avatar" className="avatar" />
             <div className="rango">{b.rango}</div>
             <h3>{b.apellido}, {b.nombre}</h3>
-            <div className="legajo">Legajo: {b.legajo || 'S/D'}</div>
+            <div className="legajo">Legajo: {b.legajo || '-'}</div>
             
-            <div className="info-extra">
-              <span>🩸 {b.grupo_sanguineo || '-'}</span>
-              <span>🏥 {b.obra_social || '-'}</span>
+            {/* INFO EXTRA LIMPIA */}
+            <div className="info-extra" style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'10px', textAlign:'center'}}>
+              <div>
+                <small style={{display:'block', color:'#999', fontSize:'0.7rem'}}>GRUPO SANG.</small>
+                <strong>{b.grupo_sanguineo || '-'}</strong>
+              </div>
+              <div>
+                <small style={{display:'block', color:'#999', fontSize:'0.7rem'}}>OBRA SOCIAL</small>
+                <strong>{b.obra_social || '-'}</strong>
+              </div>
             </div>
 
             <div className="actions">
@@ -159,7 +203,7 @@ const PersonnelMgr = () => {
         <div className="modal-overlay">
           <form className="modal-content" onSubmit={handleSubmit(onSubmit)}>
             <h3>{editingId ? 'Editar Personal' : 'Nuevo Ingreso'}</h3>
-            {/* ... Formulario igual al anterior pero con Obra Social ... */}
+            
             <div style={{display:'grid', gap:'1rem'}}>
               <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'10px'}}>
                 <input placeholder="Nombre" {...register('nombre', {required:true})} style={{padding:'10px'}} />

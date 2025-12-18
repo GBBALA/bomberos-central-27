@@ -2,52 +2,76 @@
 
 .stats-section {
   position: relative;
-  margin-top: -50px; // Para que se monte un poco sobre el Hero
-  z-index: 10;
+  margin-top: -100px; // Sube sobre el Hero
+  z-index: 10; // Se pone por encima
   padding: 0 1rem;
-  margin-bottom: 4rem;
+  margin-bottom: 5rem;
 }
 
 .stats-grid {
-  max-width: 1100px;
-  margin: 0 auto;
+  @include container; // Usa el ancho máximo global
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
 }
 
 .stat-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 16px;
+  background: $color-white;
+  padding: 2.5rem 2rem;
+  border-radius: $radius-md;
   text-align: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
-  border-bottom: 4px solid $color-primary; // Línea roja abajo
+  box-shadow: $shadow-lg; // Sombra fuerte para efecto flotante
+  transition: $transition-smooth;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 4px solid transparent;
+
+  // Decoración sutil de fondo
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba($color-primary, 0.03) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
 
   &:hover {
     transform: translateY(-10px);
+    border-bottom-color: $color-primary;
+    
+    &::before { opacity: 1; }
+    
+    .icon-wrapper {
+      transform: scale(1.1) rotate(5deg);
+      color: $color-primary;
+    }
   }
 
   .icon-wrapper {
     font-size: 3rem;
-    color: $color-primary;
+    color: $color-dark-light; // Gris oscuro inicial
     margin-bottom: 1rem;
+    transition: $transition-smooth;
   }
 
   .stat-number {
-    font-size: 3rem;
+    font-family: $font-heading;
+    font-size: 3.5rem;
     font-weight: 900;
     color: $color-primary;
     line-height: 1;
     margin-bottom: 0.5rem;
+    display: block;
   }
 
   .stat-label {
-    font-size: 1rem;
-    color: #64748b;
-    font-weight: 600;
+    font-family: $font-body;
+    font-size: 0.9rem;
+    color: $color-gray;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
   }
 }

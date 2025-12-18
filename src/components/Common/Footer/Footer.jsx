@@ -10,9 +10,9 @@ const Footer = () => {
         {/* Columna 1: Info */}
         <div className="contact-info">
           <h4>Central 27</h4>
-          <p><FaMapMarkerAlt /> Av. Jadull y Olascoaga, Buta Ranquil</p>
-          <p><FaPhoneAlt /> Emergencias: 100 / 101</p>
-          <p><FaEnvelope /> contacto@bomberos27.com</p>
+          <p><FaMapMarkerAlt /> Av. Jose Jadull, Buta Ranquil</p>
+          <p><FaPhoneAlt /> Emergencias: 101</p>
+          <p><FaEnvelope /> Comisiondirectiva_bomberos27@gmail.com</p>
           <div style={{marginTop: '20px'}}>
             <a href="https://www.facebook.com/profile.php?id=61552348490877" target="_blank" rel="noopener noreferrer" style={{fontSize: '2rem', color: '#1877F2'}}>
               <FaFacebookSquare />

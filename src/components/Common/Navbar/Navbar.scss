@@ -1,127 +1,90 @@
 @import '../../../styles/variables';
 
 .navbar {
-  background-color: $color-dark; // Azul oscuro #1A2B49
+  background-color: $color-dark;
   height: 90px;
   width: 100%;
   position: sticky;
   top: 0;
   z-index: 1000;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
-  font-family: 'Roboto', sans-serif;
+  box-shadow: $shadow-md;
+  border-bottom: 3px solid $color-primary;
 
   &__container {
     max-width: 1200px;
-    width: 100%;
     height: 100%;
     margin: 0 auto;
-    padding: 0 2rem;
-    display: flex;             // Activar Flexbox
-    justify-content: space-between; // Elementos a los extremos
-    align-items: center;       // Centrado vertical
+    padding: 0 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
   }
 
-  /* --- LOGO (Izquierda) --- */
   .nav-brand {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    text-decoration: none;
-    user-select: none;
-
-    img {
-      height: 60px;
-      width: auto;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-    }
-
+    display: flex; align-items: center; gap: 12px; text-decoration: none; z-index: 1001;
+    img { height: 55px; width: auto; }
     .brand-text {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.1;
-
-      h1 {
-        color: white;
-        font-size: 1.5rem;
-        font-weight: 900;
-        text-transform: uppercase;
-        margin: 0;
-        letter-spacing: 1px;
-      }
-
-      span {
-        color: $color-secondary; // Dorado #FFD700
-        font-size: 0.85rem;
-        font-weight: 600;
-        letter-spacing: 2px;
-      }
+      display: flex; flex-direction: column;
+      h1 { color: $color-white; font-size: 1.4rem; font-weight: 900; line-height: 1; letter-spacing: 1px; margin: 0; }
+      span { color: $color-secondary; font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; }
     }
   }
 
-  /* --- ENLACES (Derecha) --- */
-  .nav-links {
-    display: flex;
-    gap: 2rem; // Espacio entre botones
-    align-items: center;
-
-    a {
-      color: #e2e8f0; // Blanco suave
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.95rem;
-      text-transform: uppercase;
-      transition: all 0.3s ease;
-      position: relative;
-
-      &:hover {
-        color: $color-secondary; // Dorado al pasar mouse
-      }
-
-      // Efecto de línea abajo al pasar mouse
-      &::after {
-        content: '';
-        position: absolute;
-        width: 0;
-        height: 2px;
-        bottom: -5px;
-        left: 0;
-        background-color: $color-secondary;
-        transition: width 0.3s;
-      }
-
-      &:hover::after {
-        width: 100%;
-      }
-    }
-
-    // Botón especial para Login
-    .btn-access {
-      background-color: transparent;
-      border: 1px solid rgba(255,255,255,0.3);
-      padding: 8px 20px;
-      border-radius: 30px;
-      
-      &:hover {
-        background-color: white;
-        color: $color-dark;
-        border-color: white;
-        &::after { width: 0; } // Sin linea abajo
-      }
-    }
-  }
-
-  /* --- MENU MOVIL --- */
   .mobile-icon {
-    display: none;
-    color: white;
+    display: none; // Oculto en PC
+    color: $color-white;
     font-size: 1.8rem;
     cursor: pointer;
+    z-index: 1001;
   }
 
-  @media (max-width: 768px) {
-    .nav-links {
-      display: none; // Ocultar en celular (aquí iría la lógica del menú hamburguesa)
+  .nav-links {
+    display: flex; gap: 2rem; align-items: center;
+
+    a {
+      color: rgba(255,255,255,0.9); text-decoration: none; font-weight: 600; font-size: 0.9rem;
+      text-transform: uppercase; letter-spacing: 0.5px; position: relative; transition: color 0.3s;
+      
+      &:hover { color: $color-secondary; }
     }
-    .mobile-icon { display: block; }
+
+    .admin-badge {
+      background: rgba(255,255,255,0.1); color: $color-secondary; padding: 5px 10px;
+      border-radius: 4px; font-size: 0.7rem; font-weight: 800; border: 1px solid $color-secondary;
+    }
+
+    .btn-access {
+      border: 1px solid rgba(255,255,255,0.4); padding: 8px 20px; border-radius: 50px;
+      font-size: 0.85rem; transition: all 0.3s;
+      &:hover { background: $color-primary; border-color: $color-primary; color: white; }
+      &.logout { border-color: #ef4444; color: #ef4444; &:hover { background: #ef4444; color: white; } }
+    }
+  }
+
+  /* --- RESPONSIVE MOBILE --- */
+  @media (max-width: 960px) {
+    .mobile-icon { display: block; } // Mostrar hamburguesa
+
+    .nav-links {
+      position: absolute;
+      top: 90px; // Altura del navbar
+      left: -100%; // Oculto a la izquierda
+      width: 100%;
+      height: calc(100vh - 90px);
+      background-color: rgba(15, 23, 42, 0.98); // Fondo oscuro semi-transparente
+      backdrop-filter: blur(10px);
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 3rem;
+      transition: all 0.4s ease;
+      
+      &.active { left: 0; } // Mostrar menú
+
+      a { font-size: 1.2rem; margin: 1rem 0; display: block; width: 100%; text-align: center; }
+      .btn-access { width: 80%; text-align: center; margin-top: 1rem; padding: 15px; font-size: 1rem; }
+      .admin-badge { margin-bottom: 2rem; }
+    }
   }
 }

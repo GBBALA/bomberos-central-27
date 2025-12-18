@@ -2,43 +2,46 @@
 
 .inscripcion-section {
   padding: 4rem 1rem;
-  background-color: $color-bg-light;
+  background-color: $color-light; // Variable nueva
   min-height: 80vh;
-  @include flex-center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .form-card {
-  background: white;
+  background: $color-white;
   width: 100%;
-  max-width: 600px;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-  border-top: 5px solid $color-primary; // Borde rojo arriba
+  max-width: 700px;
+  padding: 2.5rem;
+  border-radius: $radius-lg; // Variable nueva
+  box-shadow: $shadow-lg; // Variable nueva
+  border-top: 6px solid $color-primary;
 
   &__header {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
 
     h2 {
       color: $color-dark;
       font-size: 2rem;
       margin-bottom: 0.5rem;
+      text-transform: uppercase;
     }
 
     p {
-      color: $color-text-light;
+      color: $color-gray; // Variable nueva
     }
   }
 }
 
 .form-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr; // Dos columnas
+  grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
 
   @media (max-width: 768px) {
-    grid-template-columns: 1fr; // Una columna en celular
+    grid-template-columns: 1fr;
   }
 }
 
@@ -48,65 +51,68 @@
   gap: 0.5rem;
 
   label {
-    font-weight: 600;
+    font-weight: 700;
     color: $color-dark;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
   }
 
   input, textarea {
-    padding: 10px;
-    border: 1px solid $color-border;
-    border-radius: 4px;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: $radius-sm;
     font-size: 1rem;
     font-family: inherit;
+    transition: $transition-fast;
+    background-color: #f8fafc;
 
     &:focus {
       outline: none;
       border-color: $color-primary;
-      box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
+      background-color: $color-white;
+      box-shadow: 0 0 0 3px rgba(206, 17, 38, 0.1);
     }
   }
 
   textarea {
     resize: vertical;
-    min-height: 80px;
+    min-height: 100px;
   }
 
-  // Clase modificadora para inputs con error
-  &.error {
-    input { border-color: $color-primary; }
-  }
-
-  span.error-msg {
+  .error-msg {
     color: $color-primary;
     font-size: 0.8rem;
+    font-weight: 600;
   }
 }
 
 .full-width {
-  grid-column: 1 / -1; // Ocupar todo el ancho
+  grid-column: 1 / -1;
 }
 
 .btn-submit {
   width: 100%;
   padding: 1rem;
   background-color: $color-dark;
-  color: white;
+  color: $color-white;
   font-size: 1.1rem;
-  font-weight: bold;
+  font-weight: 800;
   border: none;
-  border-radius: 4px;
+  border-radius: 50px;
   cursor: pointer;
-  margin-top: 1rem;
-  transition: all 0.3s;
+  margin-top: 1.5rem;
+  transition: $transition-smooth;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 
   &:hover {
-    background-color: lighten($color-dark, 5%);
-    transform: translateY(-2px);
+    background-color: $color-primary;
+    transform: translateY(-3px);
+    box-shadow: $shadow-md;
   }
 
   &:disabled {
-    background-color: #ccc;
+    background-color: #94a3b8;
     cursor: not-allowed;
     transform: none;
   }

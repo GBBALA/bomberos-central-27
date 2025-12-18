@@ -1,20 +1,45 @@
-// Paleta de Colores Bomberos Central 27
+// --- PALETA DE COLORES PROFESIONAL ---
 
-// Principales
-$color-primary: #CE1126;   // Rojo Fuego
-$color-secondary: #FFD700; // Amarillo Oro
-$color-dark: #1A2B49;      // Azul Noche (Institucional)
+// Primarios (Identidad)
+$color-primary: #CE1126;       // Rojo Bombero Vibrante
+$color-primary-dark: #960c1b;  // Rojo Sangre (Hover)
+$color-secondary: #FFD700;     // Dorado Institucional
 
-// Neutros
+// Neutros y Fondos
+$color-dark: #0f172a;          // Azul Noche Profundo (Casi negro)
+$color-dark-light: #1e293b;    // Azul Acero (Para tarjetas oscuras)
+$color-light: #f8fafc;         // Blanco Humo (Fondo general)
 $color-white: #ffffff;
-$color-bg-light: #f0f2f5;  // Fondo gris suave para admin
-$color-text: #333333;
-$color-text-light: #666666;
-$color-border: #dddddd;
+$color-gray: #64748b;          // Texto secundario
 
-// Mixins (Atajos)
-@mixin flex-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+// --- TIPOGRAFÍA ---
+$font-heading: 'Montserrat', sans-serif;
+$font-body: 'Inter', sans-serif;
+
+// --- SOMBRAS (Efecto Elevación) ---
+$shadow-sm: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+$shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+$shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+$shadow-glow: 0 0 20px rgba(206, 17, 38, 0.15); // Resplandor rojo sutil
+
+// --- BORDES ---
+$radius-sm: 6px;
+$radius-md: 12px;
+$radius-lg: 20px;
+
+// --- TRANSICIONES ---
+$transition-fast: all 0.2s ease;
+$transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+// --- MIXINS ---
+@mixin container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+@mixin glass {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
