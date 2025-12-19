@@ -20,7 +20,7 @@ const HeroMemorial = () => {
     <section className="memorial-section">
       <div className="memorial-container">
         <h2><FaStar /> IN MEMORIAM <FaStar /></h2>
-        <p className="quote">"El sacrificio de un bombero es el precio de la seguridad de su pueblo."</p>
+        <p className="quote"></p>
 
         {heroes.map(h => (
           <div key={h.id} className="hero-profile">

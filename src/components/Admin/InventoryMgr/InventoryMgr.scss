@@ -2,15 +2,18 @@
 
 .inventory-layout {
   display: grid;
-  grid-template-columns: 250px 1fr;
+  grid-template-columns: 250px 1fr; // Diseño PC
   gap: 2rem;
   padding: 2rem;
   max-width: 1400px;
   margin: 0 auto;
   font-family: $font-body;
 
+  // --- ARREGLO MÓVIL ---
   @media (max-width: 900px) {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; // Una sola columna
+    padding: 1rem;
+    gap: 1rem;
   }
 }
 
@@ -20,6 +23,23 @@
   border-radius: $radius-md;
   box-shadow: $shadow-sm;
   height: fit-content;
+
+  // En móvil, hacemos que los botones sean más compactos o scroll horizontal
+  @media (max-width: 900px) {
+    display: flex;
+    overflow-x: auto; // Scroll horizontal si son muchas categorías
+    gap: 10px;
+    padding: 10px;
+    
+    h3 { display: none; } // Ocultar título en móvil para ahorrar espacio
+    
+    button {
+      width: auto;
+      white-space: nowrap; // Que no se rompa el texto
+      margin-bottom: 0;
+      font-size: 0.8rem;
+    }
+  }
 
   h3 {
     margin-bottom: 1rem;
@@ -41,7 +61,7 @@
     text-align: left;
     cursor: pointer;
     border-radius: $radius-sm;
-    color: $color-gray; // Arreglado
+    color: $color-gray;
     font-weight: 600;
     transition: $transition-fast;
 
@@ -60,6 +80,13 @@
   padding: 2rem;
   border-radius: $radius-md;
   box-shadow: $shadow-sm;
+  
+  // Contenedor para que la tabla tenga scroll y no rompa el diseño
+  overflow-x: auto; 
+
+  @media (max-width: 900px) {
+    padding: 1rem;
+  }
 
   .header-actions {
     display: flex;
@@ -69,8 +96,20 @@
     flex-wrap: wrap;
     gap: 1rem;
 
-    h2 { color: $color-dark; margin: 0; }
+    h2 { color: $color-dark; margin: 0; font-size: 1.5rem; }
     
+    // Ajuste de la barra de herramientas en móvil
+    div { 
+      flex-direction: column; 
+      align-items: stretch; 
+      width: 100%; 
+      
+      @media (min-width: 768px) {
+        flex-direction: row;
+        width: auto;
+      }
+    }
+
     .btn-add {
       background-color: $color-secondary;
       color: $color-dark;
@@ -79,7 +118,7 @@
       border-radius: 50px;
       font-weight: 800;
       cursor: pointer;
-      display: flex; align-items: center; gap: 5px;
+      display: flex; align-items: center; gap: 5px; justify-content: center;
       &:hover { transform: scale(1.05); }
     }
   }
@@ -89,6 +128,7 @@
   width: 100%;
   border-collapse: collapse;
   font-size: 0.95rem;
+  min-width: 800px; // Forzamos ancho mínimo para que aparezca el scroll horizontal en móvil
 
   th { 
     background: $color-light; 
@@ -103,7 +143,7 @@
   td { 
     padding: 12px; 
     border-bottom: 1px solid #f1f5f9; 
-    color: $color-dark; // Arreglado
+    color: $color-dark; 
     vertical-align: middle;
   }
 
@@ -113,7 +153,7 @@
   }
 }
 
-// Formulario Modal
+// Formulario Modal (Hacerlo responsive)
 .form-panel {
   background: #f8fafc;
   padding: 2rem;
@@ -121,10 +161,18 @@
   border: 1px solid #e2e8f0;
   margin-bottom: 2rem;
 
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
+
   .form-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1rem;
+    
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr; // Una columna en móvil
+    }
   }
   
   .full { grid-column: 1 / -1; }
@@ -138,9 +186,8 @@
 
   .form-actions {
     margin-top: 1.5rem; display: flex; gap: 10px; justify-content: flex-end;
-    
-    button { padding: 10px 20px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; }
-    .btn-save { background: $color-dark; color: white; &:hover { background: $color-primary; } }
+    button { padding: 10px 20px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; width: 100%; }
+    .btn-save { background: $color-dark; color: white; }
     .btn-cancel { background: #e2e8f0; color: $color-dark; }
   }
 }

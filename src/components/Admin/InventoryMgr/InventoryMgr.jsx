@@ -38,10 +38,9 @@ const InventoryMgr = () => {
   const fetchInventory = useCallback(async () => {
     let query = supabase
       .from('inventario')
-      .select('*, inventario_fotos(foto_url)') // Traer fotos extra
+      .select('*, inventario_fotos(foto_url)')
       .order('fecha_alta', { ascending: false });
 
-    // Búsqueda Global
     if (searchTerm.length > 2) {
       const term = `%${searchTerm}%`;
       query = query.or(`nombre.ilike.${term},marca.ilike.${term},modelo.ilike.${term},serial.ilike.${term}`);
@@ -77,7 +76,7 @@ const InventoryMgr = () => {
     }
   };
 
-  // --- LÓGICA DE GALERÍA (VERSIÓN GIGANTE + FULLSCREEN) ---
+  // --- LÓGICA DE GALERÍA (Visor Profesional) ---
   const handlePhotoClick = (item) => {
     const mainImg = item.imagen_url;
     const extraImgs = item.inventario_fotos?.map(f => f.foto_url) || [];
@@ -87,113 +86,78 @@ const InventoryMgr = () => {
 
     let currentIndex = 0;
 
+    // Actualiza la imagen en el modal abierto
     const updateImage = () => {
       const imgElement = Swal.getPopup().querySelector('#gallery-current-img');
       const counterElement = Swal.getPopup().querySelector('#gallery-counter');
-      const linkElement = Swal.getPopup().querySelector('#gallery-link');
       
       if(imgElement) {
         imgElement.style.opacity = '0.5';
         setTimeout(() => {
           imgElement.src = images[currentIndex];
           imgElement.style.opacity = '1';
-          if(linkElement) linkElement.href = images[currentIndex]; // Actualizar link de descarga/ver
         }, 150);
       }
       if(counterElement) counterElement.innerText = `${currentIndex + 1} / ${images.length}`;
     };
 
+    // Modal con HTML personalizado
     Swal.fire({
       title: item.nombre,
-      width: '95vw', // 95% del ancho de la pantalla
-      padding: '10px',
+      width: 800,
       showConfirmButton: false,
       showCloseButton: true,
-      background: '#1a1a1a', // Fondo gris oscuro casi negro
-      color: '#fff', // Texto blanco
-      backdrop: `rgba(0,0,0,0.9)`, // Fondo de atrás muy oscuro
+      background: '#fff',
+      backdrop: `rgba(0,0,0,0.8)`,
       html: `
-        <div id="gallery-container" style="position: relative; display: flex; align-items: center; justify-content: center; background: #000; border-radius: 4px; overflow: hidden; height: 75vh;">
+        <div style="position: relative; display: flex; align-items: center; justify-content: center; background: #000; border-radius: 8px; overflow: hidden; height: 450px;">
           
           <!-- Botón Anterior -->
-          <button id="btn-prev" style="position: absolute; left: 20px; z-index: 20; background: rgba(0,0,0,0.5); color: white; border: 2px solid rgba(255,255,255,0.3); width: 50px; height: 50px; cursor: pointer; border-radius: 50%; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">&#10094;</button>
+          ${images.length > 1 ? '<button id="btn-prev" style="position: absolute; left: 10px; z-index: 10; background: rgba(0,0,0,0.5); color: white; border: none; padding: 10px; cursor: pointer; border-radius: 50%; font-size: 1.5rem;">&#10094;</button>' : ''}
           
           <!-- Imagen Central -->
-          <img id="gallery-current-img" src="${images[0]}" style="max-height: 100%; max-width: 100%; object-fit: contain; transition: opacity 0.2s ease; cursor: zoom-in;">
+          <img id="gallery-current-img" src="${images[0]}" style="max-height: 100%; max-width: 100%; object-fit: contain; transition: opacity 0.2s ease;">
           
           <!-- Botón Siguiente -->
-          <button id="btn-next" style="position: absolute; right: 20px; z-index: 20; background: rgba(0,0,0,0.5); color: white; border: 2px solid rgba(255,255,255,0.3); width: 50px; height: 50px; cursor: pointer; border-radius: 50%; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">&#10095;</button>
+          ${images.length > 1 ? '<button id="btn-next" style="position: absolute; right: 10px; z-index: 10; background: rgba(0,0,0,0.5); color: white; border: none; padding: 10px; cursor: pointer; border-radius: 50%; font-size: 1.5rem;">&#10095;</button>' : ''}
           
-          <!-- Botoneras Superiores -->
-          <div style="position: absolute; top: 15px; right: 15px; z-index: 20; display: flex; gap: 10px;">
-             <!-- Ver Original -->
-             <a id="gallery-link" href="${images[0]}" target="_blank" title="Abrir original en pestaña nueva" style="background: rgba(0,0,0,0.6); color: white; padding: 8px 12px; border-radius: 4px; text-decoration: none; font-size: 0.9rem; font-weight: bold;">
-               🔗 Abrir
-             </a>
-             <!-- Fullscreen -->
-             <button id="btn-fullscreen" title="Pantalla Completa" style="background: rgba(0,0,0,0.6); color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 1rem;">
-               ⛶
-             </button>
-          </div>
-
           <!-- Contador -->
-          <div id="gallery-counter" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: white; background: rgba(0,0,0,0.6); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; font-weight: bold;">1 / ${images.length}</div>
+          <div id="gallery-counter" style="position: absolute; bottom: 10px; right: 15px; color: white; background: rgba(0,0,0,0.6); padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;">1 / ${images.length}</div>
         </div>
         
         <!-- Miniaturas -->
-        <div style="display: flex; gap: 8px; margin-top: 15px; justify-content: center; flex-wrap: wrap;">
+        <div style="display: flex; gap: 5px; margin-top: 10px; justify-content: center; flex-wrap: wrap;">
           ${images.map((img, idx) => `
-            <img class="gallery-thumb" src="${img}" data-index="${idx}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px; cursor: pointer; opacity: 0.7; border: 2px solid #333; transition: all 0.2s;">
+            <img class="gallery-thumb" src="${img}" data-index="${idx}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px; cursor: pointer; opacity: 0.6; border: 2px solid transparent;">
           `).join('')}
         </div>
       `,
       didOpen: () => {
         const popup = Swal.getPopup();
-        const container = popup.querySelector('#gallery-container');
-        const img = popup.querySelector('#gallery-current-img');
+        
+        // Eventos de navegación
+        if (images.length > 1) {
+          popup.querySelector('#btn-prev').addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            updateImage();
+          });
+          popup.querySelector('#btn-next').addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % images.length;
+            updateImage();
+          });
+        }
 
-        // Navegación
-        popup.querySelector('#btn-prev').addEventListener('click', () => {
-          currentIndex = (currentIndex - 1 + images.length) % images.length;
-          updateImage();
-        });
-        popup.querySelector('#btn-next').addEventListener('click', () => {
-          currentIndex = (currentIndex + 1) % images.length;
-          updateImage();
-        });
-
-        // Miniaturas
+        // Eventos miniaturas
         popup.querySelectorAll('.gallery-thumb').forEach(thumb => {
           thumb.addEventListener('click', (e) => {
-            // Efecto visual en miniaturas
-            popup.querySelectorAll('.gallery-thumb').forEach(t => t.style.border = '2px solid #333');
-            e.target.style.border = '2px solid #ce1126';
-            
             currentIndex = parseInt(e.target.dataset.index);
             updateImage();
           });
         });
-
-        // Lógica Pantalla Completa
-        popup.querySelector('#btn-fullscreen').addEventListener('click', () => {
-          if (!document.fullscreenElement) {
-            container.requestFullscreen().catch(err => console.log(err));
-          } else {
-            document.exitFullscreen();
-          }
-        });
-
-        // Doble clic para zoom (simple)
-        img.addEventListener('dblclick', () => {
-           if (!document.fullscreenElement) {
-            container.requestFullscreen().catch(err => console.log(err));
-          } else {
-            document.exitFullscreen();
-          }
-        });
       }
     });
   };
+
   // --- IMPRESIÓN ---
   const openPrintModal = () => {
     if (globalSelection.length === 0) return Swal.fire('Nada seleccionado', 'Selecciona ítems primero.', 'info');
@@ -330,7 +294,6 @@ const InventoryMgr = () => {
         {/* FORMULARIO Y TABLA */}
         {showForm ? (
            <form className="form-panel" onSubmit={handleSubmit(onSubmit)}>
-             {/* ... Formulario ... */}
              <div style={{display:'flex', justifyContent:'space-between'}}><h3>{editingId ? 'Editar' : 'Nuevo'}</h3><button type="button" onClick={cancelEdit}><FaTimes/></button></div>
              <div className="form-grid">
                <div className="full"><label>Nombre</label><input {...register("nombre", {required:true})}/></div>
@@ -358,7 +321,7 @@ const InventoryMgr = () => {
                 <th>Cant.</th>
                 <th>Descripción</th>
                 <th>Categoría</th>
-                <th>Acciones</th> {/* YA NO ESTÁ EL BOTÓN GALERÍA */}
+                <th>Acciones</th> {/* BOTÓN ELIMINADO */}
               </tr>
             </thead>
             <tbody>
@@ -368,7 +331,7 @@ const InventoryMgr = () => {
                   <tr key={item.id} style={{background: isSelected(item.id) ? '#e6f7ff' : 'white'}}>
                     <td style={{textAlign:'center'}}><input type="checkbox" checked={isSelected(item.id)} onChange={() => toggleSelect(item)} /></td>
                     
-                    {/* FOTO CON FUNCIONALIDAD DE CLIC INTELIGENTE */}
+                    {/* FOTO CON CLIC INTELIGENTE */}
                     <td className="col-foto">
                       <div onClick={() => handlePhotoClick(item)} style={{cursor:'pointer', position:'relative', display:'inline-block'}}>
                         <img src={item.imagen_url || 'https://via.placeholder.com/50'} className="inventory-thumb" alt=""/>
@@ -387,7 +350,7 @@ const InventoryMgr = () => {
                     </td>
                     <td><span className="badge">{CATEGORIAS.find(c => c.id === item.categoria_macro)?.label || item.categoria_macro}</span></td>
                     
-                    {/* ACCIONES LIMPIAS (Solo Editar y Borrar) */}
+                    {/* ACCIONES (LIMPIAS) */}
                     <td>
                       <div style={{display:'flex', gap:'8px'}}>
                         <button onClick={() => startEdit(item)} style={{border:'none', background:'none', color:'#FFD700', fontSize:'1.1rem', cursor:'pointer'}} title="Editar"><FaEdit/></button>
