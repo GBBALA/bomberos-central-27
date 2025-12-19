@@ -2,44 +2,26 @@
 
 .inventory-layout {
   display: grid;
-  grid-template-columns: 250px 1fr; // Diseño PC
+  grid-template-columns: 250px 1fr;
   gap: 2rem;
   padding: 2rem;
   max-width: 1400px;
   margin: 0 auto;
   font-family: $font-body;
 
-  // --- ARREGLO MÓVIL ---
   @media (max-width: 900px) {
-    grid-template-columns: 1fr; // Una sola columna
+    grid-template-columns: 1fr;
     padding: 1rem;
-    gap: 1rem;
   }
 }
 
+/* SIDEBAR */
 .inventory-sidebar {
   background: $color-white;
   padding: 1.5rem;
   border-radius: $radius-md;
   box-shadow: $shadow-sm;
   height: fit-content;
-
-  // En móvil, hacemos que los botones sean más compactos o scroll horizontal
-  @media (max-width: 900px) {
-    display: flex;
-    overflow-x: auto; // Scroll horizontal si son muchas categorías
-    gap: 10px;
-    padding: 10px;
-    
-    h3 { display: none; } // Ocultar título en móvil para ahorrar espacio
-    
-    button {
-      width: auto;
-      white-space: nowrap; // Que no se rompa el texto
-      margin-bottom: 0;
-      font-size: 0.8rem;
-    }
-  }
 
   h3 {
     margin-bottom: 1rem;
@@ -50,144 +32,139 @@
   }
 
   button {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 5px;
-    border: none;
-    background: transparent;
-    text-align: left;
-    cursor: pointer;
-    border-radius: $radius-sm;
-    color: $color-gray;
-    font-weight: 600;
+    display: flex; align-items: center; gap: 10px; width: 100%; padding: 12px;
+    margin-bottom: 5px; border: none; background: transparent; text-align: left;
+    cursor: pointer; border-radius: $radius-sm; color: $color-gray; font-weight: 600;
     transition: $transition-fast;
 
     &:hover { background-color: $color-light; color: $color-dark; }
-
-    &.active {
-      background-color: $color-primary;
-      color: white;
-      box-shadow: $shadow-sm;
-    }
+    &.active { background-color: $color-primary; color: white; box-shadow: $shadow-sm; }
   }
 }
 
+/* CONTENIDO PRINCIPAL */
 .inventory-content {
   background: $color-white;
   padding: 2rem;
   border-radius: $radius-md;
   box-shadow: $shadow-sm;
-  
-  // Contenedor para que la tabla tenga scroll y no rompa el diseño
-  overflow-x: auto; 
-
-  @media (max-width: 900px) {
-    padding: 1rem;
-  }
 
   .header-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-    gap: 1rem;
-
-    h2 { color: $color-dark; margin: 0; font-size: 1.5rem; }
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;
     
-    // Ajuste de la barra de herramientas en móvil
-    div { 
-      flex-direction: column; 
-      align-items: stretch; 
-      width: 100%; 
-      
-      @media (min-width: 768px) {
-        flex-direction: row;
-        width: auto;
-      }
+    h2 { color: $color-dark; margin: 0; font-size: 1.8rem; }
+    
+    .actions-group {
+      display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
     }
 
     .btn-add {
-      background-color: $color-secondary;
-      color: $color-dark;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 50px;
-      font-weight: 800;
-      cursor: pointer;
-      display: flex; align-items: center; gap: 5px; justify-content: center;
+      background-color: $color-secondary; color: $color-dark; border: none;
+      padding: 10px 20px; border-radius: 50px; font-weight: 800; cursor: pointer;
+      display: flex; align-items: center; gap: 8px;
       &:hover { transform: scale(1.05); }
     }
   }
 }
 
+/* --- TABLA MEJORADA --- */
 .notebook-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.95rem;
-  min-width: 800px; // Forzamos ancho mínimo para que aparezca el scroll horizontal en móvil
+  width: 100%; border-collapse: collapse; font-size: 0.95rem; margin-top: 1rem;
 
   th { 
-    background: $color-light; 
-    padding: 12px; 
-    text-align: left; 
-    color: $color-gray; 
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 0.8rem;
+    background: $color-light; padding: 15px; text-align: left; 
+    color: $color-dark; font-weight: 800; text-transform: uppercase; font-size: 0.8rem;
+    border-bottom: 2px solid #e2e8f0;
   }
   
   td { 
-    padding: 12px; 
-    border-bottom: 1px solid #f1f5f9; 
-    color: $color-dark; 
-    vertical-align: middle;
+    padding: 15px; border-bottom: 1px solid #f1f5f9; color: $color-dark; vertical-align: middle; 
+  }
+
+  /* ESTILO PARA ÍTEMS DADOS DE BAJA */
+  tr.is-baja {
+    background-color: #f8f9fa;
+    opacity: 0.7;
+    
+    td {
+      color: #999;
+      text-decoration: line-through; /* Tachado sutil */
+    }
+    
+    /* Excepciones que no se tachan */
+    td.col-foto, td.col-actions, td.col-status {
+      text-decoration: none;
+    }
+
+    /* Etiqueta de baja */
+    .badge-baja {
+      background: #fee2e2; color: #dc2626; padding: 4px 8px; 
+      border-radius: 4px; font-size: 0.7rem; font-weight: bold; text-decoration: none;
+      display: inline-block;
+    }
   }
 
   .inventory-thumb {
-    width: 45px; height: 45px; border-radius: 6px; object-fit: cover; border: 1px solid #eee;
-    &:hover { transform: scale(1.1); border-color: $color-primary; }
+    width: 50px; height: 50px; border-radius: 8px; object-fit: cover; border: 1px solid #eee;
+    cursor: pointer; transition: transform 0.2s;
+    &:hover { transform: scale(1.1); }
   }
 }
 
-// Formulario Modal (Hacerlo responsive)
+/* --- FORMULARIO DE CARGA (Diseño Limpio) --- */
 .form-panel {
-  background: #f8fafc;
-  padding: 2rem;
-  border-radius: $radius-md;
+  background: #fff;
   border: 1px solid #e2e8f0;
+  border-radius: $radius-md;
+  padding: 2rem;
   margin-bottom: 2rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  animation: slideDown 0.3s ease;
 
-  @media (max-width: 768px) {
-    padding: 1rem;
+  .form-header-row {
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 2px solid $color-primary; padding-bottom: 1rem; margin-bottom: 1.5rem;
+    h3 { margin: 0; color: $color-dark; font-size: 1.3rem; }
+  }
+
+  // Secciones del formulario
+  .form-section {
+    margin-bottom: 1.5rem;
+    
+    h4 {
+      font-size: 0.85rem; color: $color-gray; text-transform: uppercase; 
+      letter-spacing: 1px; margin-bottom: 10px; border-bottom: 1px dashed #ddd; padding-bottom: 5px;
+    }
   }
 
   .form-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    
-    @media (max-width: 768px) {
-      grid-template-columns: 1fr; // Una columna en móvil
-    }
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;
   }
   
   .full { grid-column: 1 / -1; }
 
-  label { display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 5px; text-transform: uppercase; color: $color-gray; }
+  label { 
+    display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 5px; color: $color-dark; 
+  }
   
   input, select {
-    width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: $radius-sm;
-    &:focus { outline: none; border-color: $color-primary; }
+    width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: $radius-sm; background: #f8fafc;
+    &:focus { outline: none; border-color: $color-primary; background: white; }
   }
 
   .form-actions {
-    margin-top: 1.5rem; display: flex; gap: 10px; justify-content: flex-end;
-    button { padding: 10px 20px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; width: 100%; }
-    .btn-save { background: $color-dark; color: white; }
-    .btn-cancel { background: #e2e8f0; color: $color-dark; }
+    margin-top: 2rem; display: flex; gap: 10px; justify-content: flex-end;
+    
+    button { 
+      padding: 12px 25px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; 
+      transition: $transition-fast;
+    }
+    .btn-save { background: $color-dark; color: white; &:hover { background: $color-primary; } }
+    .btn-cancel { background: #e2e8f0; color: $color-dark; &:hover { background: #cbd5e1; } }
   }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
 }

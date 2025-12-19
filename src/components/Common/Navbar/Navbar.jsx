@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
-import { FaBars, FaTimes, FaPhoneAlt, FaUserCircle } from 'react-icons/fa'; // Iconos nuevos
+import { FaBars, FaTimes, FaMobileAlt, FaUserCircle } from 'react-icons/fa'; // Icono celular
 import './Navbar.scss';
 
 const Navbar = () => {
@@ -22,7 +22,6 @@ const Navbar = () => {
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
 
-  // Función para scroll suave a secciones (si estamos en home)
   const scrollToSection = (id) => {
     closeMenu();
     const element = document.getElementById(id);
@@ -30,7 +29,6 @@ const Navbar = () => {
       element.scrollIntoView({ behavior: 'smooth' });
     } else {
       navigate('/');
-      // Pequeño timeout para dar tiempo a navegar antes de scrollear
       setTimeout(() => {
         const el = document.getElementById(id);
         if(el) el.scrollIntoView({ behavior: 'smooth' });
@@ -60,7 +58,7 @@ const Navbar = () => {
         <div className={`nav-links ${isOpen ? 'active' : ''}`}>
           
           {user ? (
-            // --- MODO ADMIN ---
+            // --- ADMIN ---
             <>
               <div style={{color:'#FFD700', fontSize:'0.8rem', border:'1px solid #FFD700', padding:'2px 8px', borderRadius:'4px'}}>ADMIN</div>
               <Link to="/admin/dashboard" onClick={closeMenu}>Aspirantes</Link>
@@ -74,25 +72,21 @@ const Navbar = () => {
               </button>
             </>
           ) : (
-            // --- MODO PÚBLICO (MEJORADO) ---
+            // --- PÚBLICO ---
             <>
               <Link to="/" onClick={closeMenu}>Inicio</Link>
-              
-              {/* Enlaces de ancla */}
               <a href="#nuestra-flota" onClick={() => scrollToSection('nuestra-flota')}>Flota</a>
               <a href="#novedades" onClick={() => scrollToSection('novedades')}>Novedades</a>
 
-              {/* Botón CTA Destacado */}
               <Link to="/inscripcion" className="btn-recruit" onClick={closeMenu}>
                 Quiero ser Bombero
               </Link>
 
-              {/* Botón Emergencia */}
-              <a href="tel:100" className="emergency-call">
-                <FaPhoneAlt /> 100
+              {/* BOTÓN CELULAR GUARDIA */}
+              <a href="tel:2942533813" className="emergency-call">
+                <FaMobileAlt /> 
               </a>
 
-              {/* Icono Login Discreto */}
               <Link to="/login" className="btn-login-icon" onClick={closeMenu} title="Acceso Personal">
                 <FaUserCircle />
               </Link>

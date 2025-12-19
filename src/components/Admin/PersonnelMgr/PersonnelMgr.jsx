@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom'; // Importar para navegar al memorial
+import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { FaPlus, FaEdit, FaTrash, FaCamera, FaPrint, FaStar } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaCamera, FaPrint, FaStar, FaShieldAlt } from 'react-icons/fa';
 import { supabase } from '../../../config/supabaseClient';
 import { uploadImageToCloudinary } from '../../../services/cloudinaryService';
 import ImageCropper from '../../Common/ImageCropper/ImageCropper';
@@ -15,12 +15,9 @@ const PersonnelMgr = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate(); // Hook para redireccionar
+  const navigate = useNavigate();
   
-  // Selección para Nómina
   const [selectedIds, setSelectedIds] = useState([]);
-
-  // Cropper states
   const [tempImgSrc, setTempImgSrc] = useState(null);
   const [finalImageFile, setFinalImageFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -32,15 +29,12 @@ const PersonnelMgr = () => {
 
   useEffect(() => { fetchBomberos(); }, []);
 
-  // Lógica de Selección
   const toggleSelect = (id) => {
     setSelectedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
   };
 
   const handlePrint = () => {
-    if (selectedIds.length === 0) return Swal.fire('Atención', 'Selecciona al personal para la nómina.', 'info');
-    
-    // Filtrar los bomberos seleccionados
+    if (selectedIds.length === 0) return Swal.fire('Atención', 'Selecciona al personal.', 'info');
     const listToPrint = bomberos.filter(b => selectedIds.includes(b.id));
     generatePersonnelPDF(listToPrint);
   };
@@ -58,6 +52,7 @@ const PersonnelMgr = () => {
         setValue('dni', bombero.dni); setValue('legajo', bombero.legajo);
         setValue('rango', bombero.rango); setValue('grupo_sanguineo', bombero.grupo_sanguineo);
         setValue('obra_social', bombero.obra_social);
+        setValue('poliza_seguro', bombero.poliza_seguro);
         setValue('telefono', bombero.telefono); setValue('estado', bombero.estado);
         setPreviewUrl(bombero.foto_url);
       } else {
@@ -89,7 +84,9 @@ const PersonnelMgr = () => {
         
         const payload = {
           nombre: data.nombre, apellido: data.apellido, dni: data.dni, legajo: data.legajo,
-          rango: data.rango, grupo_sanguineo: data.grupo_sanguineo, obra_social: data.obra_social,
+          rango: data.rango, grupo_sanguineo: data.grupo_sanguineo, 
+          obra_social: data.obra_social,
+          poliza_seguro: data.poliza_seguro,
           telefono: data.telefono, estado: data.estado,
           ...(fotoUrl && { foto_url: fotoUrl })
         };
@@ -129,29 +126,12 @@ const PersonnelMgr = () => {
         </div>
         
         <div style={{ display: 'flex', gap: '10px' }}>
-          {/* BOTÓN IR A MEMORIAL */}
-          <button 
-            onClick={() => navigate('/admin/memorial')}
-            style={{
-              background: '#333', color: '#FFD700', border: '1px solid #FFD700', 
-              padding: '10px 20px', borderRadius: '30px', cursor: 'pointer', 
-              fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px'
-            }}
-          >
+          <button onClick={() => navigate('/admin/memorial')} style={{background: '#333', color: '#FFD700', border: '1px solid #FFD700', padding: '10px 20px', borderRadius: '30px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px'}}>
             <FaStar /> Gestionar Memorial
           </button>
-
-          <button 
-            onClick={handlePrint}
-            style={{
-              background: 'white', border: '1px solid #CE1126', color: '#CE1126', 
-              padding: '10px 20px', borderRadius: '30px', cursor: 'pointer', 
-              fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px'
-            }}
-          >
+          <button onClick={handlePrint} style={{background: 'white', border: '1px solid #CE1126', color: '#CE1126', padding: '10px 20px', borderRadius: '30px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px'}}>
             <FaPrint /> Nómina ({selectedIds.length})
           </button>
-
           <button className="btn-add" onClick={() => openModal()} style={{background:'#CE1126', color:'white', border:'none', padding:'10px 20px', borderRadius:'30px', cursor:'pointer', fontWeight:'bold', display:'flex', alignItems:'center', gap:'10px'}}>
             <FaPlus /> Agregar
           </button>
@@ -160,34 +140,27 @@ const PersonnelMgr = () => {
 
       <div className="personnel-grid">
         {bomberos.map(b => (
-          // Tarjeta limpia sin emojis
-          <div key={b.id} 
-               className={`bombero-card rango-${b.rango?.split(' ')[0] || 'Bombero'}`}
-               style={{border: selectedIds.includes(b.id) ? '2px solid #1890ff' : '', background: selectedIds.includes(b.id) ? '#f0f9ff' : ''}}
-          >
+          <div key={b.id} className={`bombero-card rango-${b.rango === 'Bombero' ? 'Bombero' : 'Oficial'}`} style={{border: selectedIds.includes(b.id) ? '2px solid #1890ff' : '', background: selectedIds.includes(b.id) ? '#f0f9ff' : ''}}>
             <div style={{position:'absolute', top:'10px', left:'10px'}}>
-              <input 
-                type="checkbox" 
-                checked={selectedIds.includes(b.id)} 
-                onChange={() => toggleSelect(b.id)} 
-                style={{width:'18px', height:'18px', cursor:'pointer'}}
-              />
+              <input type="checkbox" checked={selectedIds.includes(b.id)} onChange={() => toggleSelect(b.id)} style={{width:'18px', height:'18px', cursor:'pointer'}}/>
             </div>
 
             <img src={b.foto_url} alt="Avatar" className="avatar" />
+            
+            {/* RANGO (Simplificado) */}
             <div className="rango">{b.rango}</div>
+            
             <h3>{b.apellido}, {b.nombre}</h3>
             <div className="legajo">Legajo: {b.legajo || '-'}</div>
             
-            {/* INFO EXTRA LIMPIA */}
             <div className="info-extra" style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'10px', textAlign:'center'}}>
-              <div>
-                <small style={{display:'block', color:'#999', fontSize:'0.7rem'}}>GRUPO SANG.</small>
-                <strong>{b.grupo_sanguineo || '-'}</strong>
-              </div>
               <div>
                 <small style={{display:'block', color:'#999', fontSize:'0.7rem'}}>OBRA SOCIAL</small>
                 <strong>{b.obra_social || '-'}</strong>
+              </div>
+              <div>
+                <small style={{display:'block', color:'#999', fontSize:'0.7rem'}}>PÓLIZA SEG.</small>
+                <strong>{b.poliza_seguro || '-'}</strong>
               </div>
             </div>
 
@@ -213,17 +186,23 @@ const PersonnelMgr = () => {
                 <input placeholder="DNI" {...register('dni')} style={{padding:'10px'}} />
                 <input placeholder="N° Legajo" {...register('legajo')} style={{padding:'10px'}} />
               </div>
+              
+              {/* SELECTOR SIMPLIFICADO */}
               <select {...register('rango')} style={{padding:'10px'}}>
                 <option value="Bombero">Bombero</option>
-                <option value="Suboficial">Suboficial</option>
-                <option value="Oficial">Oficial</option>
-                <option value="Jefatura">Jefatura</option>
+                <option value="Aspirante">Aspirante</option>
               </select>
+              
               <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'10px'}}>
                 <input placeholder="Grupo Sang." {...register('grupo_sanguineo')} style={{padding:'10px'}} />
-                <input placeholder="Obra Social" {...register('obra_social')} style={{padding:'10px'}} />
+                <input placeholder="Teléfono" {...register('telefono')} style={{padding:'10px'}} />
               </div>
-              <input placeholder="Teléfono" {...register('telefono')} style={{padding:'10px'}} />
+
+              {/* CAMPOS OBRA SOCIAL Y POLIZA */}
+              <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'10px'}}>
+                <input placeholder="Obra Social" {...register('obra_social')} style={{padding:'10px'}} />
+                <input placeholder="Póliza de Seguro" {...register('poliza_seguro')} style={{padding:'10px'}} />
+              </div>
 
               <div className="photo-upload-section" style={{textAlign:'center', border:'2px dashed #ccc', padding:'1rem', borderRadius:'8px'}}>
                 {previewUrl ? (

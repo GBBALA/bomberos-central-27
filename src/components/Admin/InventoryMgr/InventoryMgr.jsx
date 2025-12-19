@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
-import { FaCar, FaTshirt, FaHardHat, FaBroadcastTower, FaTools, FaCouch, FaPlus, FaEdit, FaTrash, FaTimes, FaPrint, FaSearch } from 'react-icons/fa';
+import { FaCar, FaTshirt, FaHardHat, FaBroadcastTower, FaTools, FaCouch, FaPlus, FaEdit, FaTrash, FaTimes, FaPrint, FaSearch, FaBan, FaArrowUp } from 'react-icons/fa';
 import { supabase } from '../../../config/supabaseClient';
 import { uploadImageToCloudinary } from '../../../services/cloudinaryService';
 import { generateManifestPDF } from '../../../services/pdfService';
@@ -86,73 +86,70 @@ const InventoryMgr = () => {
 
     let currentIndex = 0;
 
-    // Actualiza la imagen en el modal abierto
     const updateImage = () => {
       const imgElement = Swal.getPopup().querySelector('#gallery-current-img');
       const counterElement = Swal.getPopup().querySelector('#gallery-counter');
+      const linkElement = Swal.getPopup().querySelector('#gallery-link');
       
       if(imgElement) {
         imgElement.style.opacity = '0.5';
         setTimeout(() => {
           imgElement.src = images[currentIndex];
           imgElement.style.opacity = '1';
+          if(linkElement) linkElement.href = images[currentIndex];
         }, 150);
       }
       if(counterElement) counterElement.innerText = `${currentIndex + 1} / ${images.length}`;
     };
 
-    // Modal con HTML personalizado
     Swal.fire({
       title: item.nombre,
-      width: 800,
+      width: '95vw',
+      padding: '10px',
       showConfirmButton: false,
       showCloseButton: true,
-      background: '#fff',
-      backdrop: `rgba(0,0,0,0.8)`,
+      background: '#1a1a1a',
+      color: '#fff',
+      backdrop: `rgba(0,0,0,0.9)`,
       html: `
-        <div style="position: relative; display: flex; align-items: center; justify-content: center; background: #000; border-radius: 8px; overflow: hidden; height: 450px;">
-          
-          <!-- Botón Anterior -->
-          ${images.length > 1 ? '<button id="btn-prev" style="position: absolute; left: 10px; z-index: 10; background: rgba(0,0,0,0.5); color: white; border: none; padding: 10px; cursor: pointer; border-radius: 50%; font-size: 1.5rem;">&#10094;</button>' : ''}
-          
-          <!-- Imagen Central -->
-          <img id="gallery-current-img" src="${images[0]}" style="max-height: 100%; max-width: 100%; object-fit: contain; transition: opacity 0.2s ease;">
-          
-          <!-- Botón Siguiente -->
-          ${images.length > 1 ? '<button id="btn-next" style="position: absolute; right: 10px; z-index: 10; background: rgba(0,0,0,0.5); color: white; border: none; padding: 10px; cursor: pointer; border-radius: 50%; font-size: 1.5rem;">&#10095;</button>' : ''}
-          
-          <!-- Contador -->
-          <div id="gallery-counter" style="position: absolute; bottom: 10px; right: 15px; color: white; background: rgba(0,0,0,0.6); padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;">1 / ${images.length}</div>
+        <div id="gallery-container" style="position: relative; display: flex; align-items: center; justify-content: center; background: #000; border-radius: 4px; overflow: hidden; height: 75vh;">
+          ${images.length > 1 ? '<button id="btn-prev" style="position: absolute; left: 20px; z-index: 20; background: rgba(0,0,0,0.5); color: white; border: 2px solid rgba(255,255,255,0.3); width: 50px; height: 50px; cursor: pointer; border-radius: 50%; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">&#10094;</button>' : ''}
+          <img id="gallery-current-img" src="${images[0]}" style="max-height: 100%; max-width: 100%; object-fit: contain; transition: opacity 0.2s ease; cursor: zoom-in;">
+          ${images.length > 1 ? '<button id="btn-next" style="position: absolute; right: 20px; z-index: 20; background: rgba(0,0,0,0.5); color: white; border: 2px solid rgba(255,255,255,0.3); width: 50px; height: 50px; cursor: pointer; border-radius: 50%; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">&#10095;</button>' : ''}
+          <div style="position: absolute; top: 15px; right: 15px; z-index: 20; display: flex; gap: 10px;">
+             <a id="gallery-link" href="${images[0]}" target="_blank" title="Abrir original" style="background: rgba(0,0,0,0.6); color: white; padding: 8px 12px; border-radius: 4px; text-decoration: none; font-size: 0.9rem; font-weight: bold;">🔗 Abrir</a>
+             <button id="btn-fullscreen" title="Pantalla Completa" style="background: rgba(0,0,0,0.6); color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 1rem;">⛶</button>
+          </div>
+          <div id="gallery-counter" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: white; background: rgba(0,0,0,0.6); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; font-weight: bold;">1 / ${images.length}</div>
         </div>
-        
-        <!-- Miniaturas -->
-        <div style="display: flex; gap: 5px; margin-top: 10px; justify-content: center; flex-wrap: wrap;">
-          ${images.map((img, idx) => `
-            <img class="gallery-thumb" src="${img}" data-index="${idx}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px; cursor: pointer; opacity: 0.6; border: 2px solid transparent;">
-          `).join('')}
+        <div style="display: flex; gap: 8px; margin-top: 15px; justify-content: center; flex-wrap: wrap;">
+          ${images.map((img, idx) => `<img class="gallery-thumb" src="${img}" data-index="${idx}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px; cursor: pointer; opacity: 0.7; border: 2px solid #333; transition: all 0.2s;">`).join('')}
         </div>
       `,
       didOpen: () => {
         const popup = Swal.getPopup();
-        
-        // Eventos de navegación
-        if (images.length > 1) {
-          popup.querySelector('#btn-prev').addEventListener('click', () => {
-            currentIndex = (currentIndex - 1 + images.length) % images.length;
-            updateImage();
-          });
-          popup.querySelector('#btn-next').addEventListener('click', () => {
-            currentIndex = (currentIndex + 1) % images.length;
-            updateImage();
-          });
-        }
+        const container = popup.querySelector('#gallery-container');
+        const img = popup.querySelector('#gallery-current-img');
 
-        // Eventos miniaturas
+        if (images.length > 1) {
+          popup.querySelector('#btn-prev').addEventListener('click', () => { currentIndex = (currentIndex - 1 + images.length) % images.length; updateImage(); });
+          popup.querySelector('#btn-next').addEventListener('click', () => { currentIndex = (currentIndex + 1) % images.length; updateImage(); });
+        }
         popup.querySelectorAll('.gallery-thumb').forEach(thumb => {
           thumb.addEventListener('click', (e) => {
+            popup.querySelectorAll('.gallery-thumb').forEach(t => t.style.border = '2px solid #333');
+            e.target.style.border = '2px solid #ce1126';
             currentIndex = parseInt(e.target.dataset.index);
             updateImage();
           });
+        });
+        popup.querySelector('#btn-fullscreen').addEventListener('click', () => {
+          if (!document.fullscreenElement) container.requestFullscreen().catch(err => console.log(err));
+          else document.exitFullscreen();
+        });
+        img.addEventListener('dblclick', () => {
+           if (!document.fullscreenElement) container.requestFullscreen().catch(err => console.log(err));
+           else document.exitFullscreen();
         });
       }
     });
@@ -175,6 +172,44 @@ const InventoryMgr = () => {
     generateManifestPDF(finalItems);
     setShowPrintModal(false);
     setGlobalSelection([]);
+  };
+
+  // --- NUEVA FUNCIÓN: DAR DE BAJA / REACTIVAR ---
+  const handleToggleBaja = async () => {
+    if (!editingId) return;
+    
+    // Buscar el ítem actual
+    const currentItem = items.find(i => i.id === editingId);
+    if (!currentItem) return;
+
+    const isBaja = !!currentItem.fecha_baja;
+    const action = isBaja ? 'Reactivar (Dar de Alta)' : 'Dar de Baja';
+    const color = isBaja ? '#28a745' : '#d33';
+
+    const r = await Swal.fire({
+      title: `¿${action}?`,
+      text: isBaja ? "El ítem volverá a estar operativo." : "El ítem quedará marcado como fuera de servicio.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: color,
+      confirmButtonText: `Sí, ${action.split(' ')[0]}`
+    });
+
+    if (r.isConfirmed) {
+      const { error } = await supabase
+        .from('inventario')
+        .update({ 
+          fecha_baja: isBaja ? null : new Date().toISOString().split('T')[0],
+          estado: isBaja ? 'Operativo' : 'Fuera de Servicio'
+        })
+        .eq('id', editingId);
+      
+      if (!error) {
+        Swal.fire('Actualizado', `Estado cambiado correctamente.`, 'success');
+        cancelEdit(); // Cerramos el formulario
+        fetchInventory(); // Recargamos la tabla
+      }
+    }
   };
 
   // --- CRUD ---
@@ -294,7 +329,11 @@ const InventoryMgr = () => {
         {/* FORMULARIO Y TABLA */}
         {showForm ? (
            <form className="form-panel" onSubmit={handleSubmit(onSubmit)}>
-             <div style={{display:'flex', justifyContent:'space-between'}}><h3>{editingId ? 'Editar' : 'Nuevo'}</h3><button type="button" onClick={cancelEdit}><FaTimes/></button></div>
+             <div style={{display:'flex', justifyContent:'space-between'}}>
+               <h3>{editingId ? 'Editar Ítem' : 'Registrar Nuevo'}</h3>
+               <button type="button" onClick={cancelEdit} style={{background:'none', border:'none', fontSize:'1.5rem', cursor:'pointer'}}><FaTimes/></button>
+             </div>
+             
              <div className="form-grid">
                <div className="full"><label>Nombre</label><input {...register("nombre", {required:true})}/></div>
                <div><label>Cantidad</label><input type="number" {...register("cantidad")}/></div>
@@ -310,7 +349,36 @@ const InventoryMgr = () => {
                  <input type="file" multiple {...register("fotos")} accept="image/*" />
                </div>
              </div>
-             <div className="form-actions"><button type="submit">Guardar</button></div>
+             
+             <div className="form-actions" style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginTop:'20px'}}>
+               {/* BOTÓN DAR DE BAJA (Solo si estamos editando) */}
+               {editingId && (
+                 <button 
+                   type="button" 
+                   onClick={handleToggleBaja}
+                   style={{
+                     background: '#fff', 
+                     border: '2px solid #d33', 
+                     color: '#d33', 
+                     padding: '10px 20px', 
+                     borderRadius: '6px', 
+                     fontWeight: 'bold',
+                     display: 'flex', 
+                     alignItems: 'center', 
+                     gap: '8px'
+                   }}
+                 >
+                   <FaBan /> Cambiar Estado (Baja/Alta)
+                 </button>
+               )}
+
+               <div style={{display:'flex', gap:'10px', marginLeft: 'auto'}}>
+                 <button type="button" onClick={cancelEdit} className="btn-cancel">Cancelar</button>
+                 <button type="submit" disabled={loading} className="btn-save">
+                   {loading ? 'Guardando...' : 'Guardar'}
+                 </button>
+               </div>
+             </div>
            </form>
         ) : (
           <table className="notebook-table">
@@ -321,17 +389,19 @@ const InventoryMgr = () => {
                 <th>Cant.</th>
                 <th>Descripción</th>
                 <th>Categoría</th>
-                <th>Acciones</th> {/* BOTÓN ELIMINADO */}
+                <th>Acciones</th> 
               </tr>
             </thead>
             <tbody>
               {items.map((item) => {
                 const totalFotos = (item.imagen_url ? 1 : 0) + (item.inventario_fotos?.length || 0);
+                // Si tiene fecha_baja, se marca visualmente
+                const isBaja = !!item.fecha_baja;
+
                 return (
-                  <tr key={item.id} style={{background: isSelected(item.id) ? '#e6f7ff' : 'white'}}>
+                  <tr key={item.id} style={{background: isSelected(item.id) ? '#e6f7ff' : (isBaja ? '#f5f5f5' : 'white'), opacity: isBaja ? 0.6 : 1}}>
                     <td style={{textAlign:'center'}}><input type="checkbox" checked={isSelected(item.id)} onChange={() => toggleSelect(item)} /></td>
                     
-                    {/* FOTO CON CLIC INTELIGENTE */}
                     <td className="col-foto">
                       <div onClick={() => handlePhotoClick(item)} style={{cursor:'pointer', position:'relative', display:'inline-block'}}>
                         <img src={item.imagen_url || 'https://via.placeholder.com/50'} className="inventory-thumb" alt=""/>
@@ -346,11 +416,12 @@ const InventoryMgr = () => {
                     <td style={{fontWeight:'bold'}}>{item.cantidad}</td>
                     <td>
                       <strong>{item.nombre}</strong>
+                      {isBaja && <span style={{color:'red', marginLeft:'10px', fontWeight:'bold', fontSize:'0.8rem'}}>(BAJA)</span>}
                       <div style={{fontSize:'0.8rem', color:'#666'}}>{item.marca} {item.modelo}</div>
                     </td>
                     <td><span className="badge">{CATEGORIAS.find(c => c.id === item.categoria_macro)?.label || item.categoria_macro}</span></td>
                     
-                    {/* ACCIONES (LIMPIAS) */}
+                    {/* SOLO EDICIÓN Y BORRADO EN TABLA */}
                     <td>
                       <div style={{display:'flex', gap:'8px'}}>
                         <button onClick={() => startEdit(item)} style={{border:'none', background:'none', color:'#FFD700', fontSize:'1.1rem', cursor:'pointer'}} title="Editar"><FaEdit/></button>
