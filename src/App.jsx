@@ -53,10 +53,7 @@ function App() {
                 <FireRiskWidget />
               </section>
 
-              {/* 4. SECCIÓN COMUNIDAD: NOVEDADES Y FACEBOOK (Todo en uno) */}
-             <section style={{ backgroundColor: '#f8fafc', padding: '4rem 1rem', marginBottom: '2rem' }}>
-              <NewsPortal />
-              </section>
+              
               {/* AGREGAR ID AQUÍ vvv */}
 <section id="novedades" style={{ backgroundColor: '#f8fafc', padding: '4rem 1rem', marginBottom: '2rem' }}>
   <div style={{ maxWidth: '1100px', margin: '0 auto' }}>

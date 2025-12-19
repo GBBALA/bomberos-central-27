@@ -89,7 +89,7 @@ const Navbar = () => {
 
               {/* Botón Emergencia */}
               <a href="tel:100" className="emergency-call">
-                <FaPhoneAlt /> 101
+                <FaPhoneAlt /> 100
               </a>
 
               {/* Icono Login Discreto */}
