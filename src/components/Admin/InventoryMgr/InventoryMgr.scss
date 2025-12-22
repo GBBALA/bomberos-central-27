@@ -12,6 +12,12 @@
   @media (max-width: 900px) {
     grid-template-columns: 1fr;
     padding: 1rem;
+    gap: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.75rem;
+    gap: 0.75rem;
   }
 }
 
@@ -23,22 +29,76 @@
   box-shadow: $shadow-sm;
   height: fit-content;
 
+  @media (max-width: 900px) {
+    padding: 1rem;
+    position: sticky;
+    top: 10px;
+    z-index: 10;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.75rem;
+    border-radius: $radius-sm;
+  }
+
   h3 {
     margin-bottom: 1rem;
     color: $color-dark;
     font-size: 1.1rem;
     border-bottom: 2px solid $color-primary;
     padding-bottom: 0.5rem;
+
+    @media (max-width: 480px) {
+      font-size: 1rem;
+      margin-bottom: 0.75rem;
+    }
   }
 
   button {
-    display: flex; align-items: center; gap: 10px; width: 100%; padding: 12px;
-    margin-bottom: 5px; border: none; background: transparent; text-align: left;
-    cursor: pointer; border-radius: $radius-sm; color: $color-gray; font-weight: 600;
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    width: 100%; 
+    padding: 12px;
+    margin-bottom: 5px; 
+    border: none; 
+    background: transparent; 
+    text-align: left;
+    cursor: pointer; 
+    border-radius: $radius-sm; 
+    color: $color-gray; 
+    font-weight: 600;
     transition: $transition-fast;
+    font-size: 0.95rem;
+    min-height: 44px; // Touch target size
 
-    &:hover { background-color: $color-light; color: $color-dark; }
-    &.active { background-color: $color-primary; color: white; box-shadow: $shadow-sm; }
+    @media (max-width: 480px) {
+      padding: 10px;
+      gap: 8px;
+      font-size: 0.9rem;
+      min-height: 48px; // Mejor para móvil
+    }
+
+    &:hover { 
+      background-color: $color-light; 
+      color: $color-dark; 
+    }
+
+    &.active { 
+      background-color: $color-primary; 
+      color: white; 
+      box-shadow: $shadow-sm; 
+    }
+
+    // Ocultar texto en móviles muy pequeños, solo mostrar íconos
+    @media (max-width: 380px) {
+      justify-content: center;
+      font-size: 0;
+      
+      svg, i {
+        font-size: 1.2rem;
+      }
+    }
   }
 }
 
@@ -49,36 +109,226 @@
   border-radius: $radius-md;
   box-shadow: $shadow-sm;
 
+  @media (max-width: 900px) {
+    padding: 1.25rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1rem;
+    border-radius: $radius-sm;
+  }
+
   .header-actions {
-    display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 2rem; 
+    flex-wrap: wrap; 
+    gap: 1rem;
+
+    @media (max-width: 640px) {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
     
-    h2 { color: $color-dark; margin: 0; font-size: 1.8rem; }
+    h2 { 
+      color: $color-dark; 
+      margin: 0; 
+      font-size: 1.8rem;
+
+      @media (max-width: 640px) {
+        font-size: 1.4rem;
+        text-align: center;
+      }
+
+      @media (max-width: 480px) {
+        font-size: 1.25rem;
+      }
+    }
     
     .actions-group {
-      display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+      display: flex; 
+      gap: 10px; 
+      align-items: center; 
+      flex-wrap: wrap;
+
+      @media (max-width: 640px) {
+        width: 100%;
+        justify-content: stretch;
+        
+        > * {
+          flex: 1;
+          min-width: 140px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        flex-direction: column;
+        gap: 8px;
+        
+        > * {
+          width: 100%;
+          min-width: unset;
+        }
+      }
     }
 
     .btn-add {
-      background-color: $color-secondary; color: $color-dark; border: none;
-      padding: 10px 20px; border-radius: 50px; font-weight: 800; cursor: pointer;
-      display: flex; align-items: center; gap: 8px;
-      &:hover { transform: scale(1.05); }
+      background-color: $color-secondary; 
+      color: $color-dark; 
+      border: none;
+      padding: 10px 20px; 
+      border-radius: 50px; 
+      font-weight: 800; 
+      cursor: pointer;
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.2s;
+      min-height: 44px;
+      white-space: nowrap;
+
+      @media (max-width: 480px) {
+        padding: 12px 16px;
+        font-size: 0.9rem;
+        min-height: 48px;
+        width: 100%;
+      }
+
+      &:hover { 
+        transform: scale(1.05); 
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
     }
   }
 }
 
-/* --- TABLA MEJORADA --- */
+/* --- TABLA MEJORADA PARA MÓVIL --- */
 .notebook-table {
-  width: 100%; border-collapse: collapse; font-size: 0.95rem; margin-top: 1rem;
+  width: 100%; 
+  border-collapse: collapse; 
+  font-size: 0.95rem; 
+  margin-top: 1rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.85rem;
+  }
+
+  // En móvil, convertir tabla en tarjetas
+  @media (max-width: 640px) {
+    display: block;
+    
+    thead {
+      display: none; // Ocultar headers en móvil
+    }
+
+    tbody {
+      display: block;
+    }
+
+    tr {
+      display: block;
+      margin-bottom: 1rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 1rem;
+      background: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
+      &.is-baja {
+        background-color: #f8f9fa;
+        opacity: 0.8;
+      }
+    }
+
+    td {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border: none;
+      border-bottom: 1px solid #f1f5f9;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      // Mostrar etiqueta antes del contenido
+      &::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: $color-gray;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        flex: 0 0 40%;
+      }
+
+      // Alinear contenido a la derecha
+      > * {
+        text-align: right;
+      }
+
+      &.col-foto {
+        justify-content: center;
+        padding: 12px 0;
+
+        &::before {
+          display: none;
+        }
+      }
+
+      &.col-actions {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding-top: 12px;
+        margin-top: 8px;
+        border-top: 2px solid #e2e8f0;
+
+        &::before {
+          display: none;
+        }
+
+        button {
+          min-width: 44px;
+          min-height: 44px;
+          padding: 10px;
+        }
+      }
+    }
+  }
 
   th { 
-    background: $color-light; padding: 15px; text-align: left; 
-    color: $color-dark; font-weight: 800; text-transform: uppercase; font-size: 0.8rem;
+    background: $color-light; 
+    padding: 15px; 
+    text-align: left; 
+    color: $color-dark; 
+    font-weight: 800; 
+    text-transform: uppercase; 
+    font-size: 0.8rem;
     border-bottom: 2px solid #e2e8f0;
+
+    @media (max-width: 768px) {
+      padding: 12px 10px;
+      font-size: 0.75rem;
+    }
   }
   
   td { 
-    padding: 15px; border-bottom: 1px solid #f1f5f9; color: $color-dark; vertical-align: middle; 
+    padding: 15px; 
+    border-bottom: 1px solid #f1f5f9; 
+    color: $color-dark; 
+    vertical-align: middle;
+
+    @media (max-width: 768px) {
+      padding: 12px 10px;
+    }
   }
 
   /* ESTILO PARA ÍTEMS DADOS DE BAJA */
@@ -88,30 +338,51 @@
     
     td {
       color: #999;
-      text-decoration: line-through; /* Tachado sutil */
+      text-decoration: line-through;
     }
     
-    /* Excepciones que no se tachan */
     td.col-foto, td.col-actions, td.col-status {
       text-decoration: none;
     }
 
-    /* Etiqueta de baja */
     .badge-baja {
-      background: #fee2e2; color: #dc2626; padding: 4px 8px; 
-      border-radius: 4px; font-size: 0.7rem; font-weight: bold; text-decoration: none;
+      background: #fee2e2; 
+      color: #dc2626; 
+      padding: 4px 8px; 
+      border-radius: 4px; 
+      font-size: 0.7rem; 
+      font-weight: bold; 
+      text-decoration: none;
       display: inline-block;
     }
   }
 
   .inventory-thumb {
-    width: 50px; height: 50px; border-radius: 8px; object-fit: cover; border: 1px solid #eee;
-    cursor: pointer; transition: transform 0.2s;
-    &:hover { transform: scale(1.1); }
+    width: 50px; 
+    height: 50px; 
+    border-radius: 8px; 
+    object-fit: cover; 
+    border: 1px solid #eee;
+    cursor: pointer; 
+    transition: transform 0.2s;
+
+    @media (max-width: 640px) {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto;
+    }
+
+    &:hover { 
+      transform: scale(1.1); 
+    }
+
+    &:active {
+      transform: scale(1.15);
+    }
   }
 }
 
-/* --- FORMULARIO DE CARGA (Diseño Limpio) --- */
+/* --- FORMULARIO DE CARGA (Optimizado para móvil) --- */
 .form-panel {
   background: #fff;
   border: 1px solid #e2e8f0;
@@ -121,50 +392,254 @@
   box-shadow: 0 10px 30px rgba(0,0,0,0.05);
   animation: slideDown 0.3s ease;
 
-  .form-header-row {
-    display: flex; justify-content: space-between; align-items: center;
-    border-bottom: 2px solid $color-primary; padding-bottom: 1rem; margin-bottom: 1.5rem;
-    h3 { margin: 0; color: $color-dark; font-size: 1.3rem; }
+  @media (max-width: 640px) {
+    padding: 1.25rem;
+    border-radius: $radius-sm;
+    margin-bottom: 1.5rem;
   }
 
-  // Secciones del formulario
+  @media (max-width: 480px) {
+    padding: 1rem;
+    border: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  .form-header-row {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    border-bottom: 2px solid $color-primary; 
+    padding-bottom: 1rem; 
+    margin-bottom: 1.5rem;
+
+    @media (max-width: 480px) {
+      padding-bottom: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 { 
+      margin: 0; 
+      color: $color-dark; 
+      font-size: 1.3rem;
+
+      @media (max-width: 640px) {
+        font-size: 1.1rem;
+      }
+
+      @media (max-width: 480px) {
+        font-size: 1rem;
+      }
+    }
+
+    button {
+      min-height: 44px;
+      min-width: 44px;
+      padding: 8px;
+
+      @media (max-width: 480px) {
+        min-height: 40px;
+        min-width: 40px;
+      }
+    }
+  }
+
   .form-section {
     margin-bottom: 1.5rem;
+
+    @media (max-width: 480px) {
+      margin-bottom: 1rem;
+    }
     
     h4 {
-      font-size: 0.85rem; color: $color-gray; text-transform: uppercase; 
-      letter-spacing: 1px; margin-bottom: 10px; border-bottom: 1px dashed #ddd; padding-bottom: 5px;
+      font-size: 0.85rem; 
+      color: $color-gray; 
+      text-transform: uppercase; 
+      letter-spacing: 1px; 
+      margin-bottom: 10px; 
+      border-bottom: 1px dashed #ddd; 
+      padding-bottom: 5px;
+
+      @media (max-width: 480px) {
+        font-size: 0.8rem;
+        margin-bottom: 8px;
+      }
     }
   }
 
   .form-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+    gap: 1rem;
+
+    @media (max-width: 640px) {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
   }
   
-  .full { grid-column: 1 / -1; }
+  .full { 
+    grid-column: 1 / -1; 
+  }
 
   label { 
-    display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 5px; color: $color-dark; 
+    display: block; 
+    font-size: 0.8rem; 
+    font-weight: 700; 
+    margin-bottom: 5px; 
+    color: $color-dark;
+
+    @media (max-width: 480px) {
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+    }
   }
   
-  input, select {
-    width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: $radius-sm; background: #f8fafc;
-    &:focus { outline: none; border-color: $color-primary; background: white; }
+  input, select, textarea {
+    width: 100%; 
+    padding: 12px; 
+    border: 1px solid #cbd5e1; 
+    border-radius: $radius-sm; 
+    background: #f8fafc;
+    font-size: 1rem;
+    min-height: 44px;
+    -webkit-appearance: none;
+    appearance: none;
+
+    @media (max-width: 480px) {
+      padding: 14px 12px;
+      font-size: 16px; // Evita zoom automático en iOS
+      min-height: 48px;
+    }
+
+    &:focus { 
+      outline: none; 
+      border-color: $color-primary; 
+      background: white;
+      box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
+    }
+  }
+
+  // Mejor diseño para select en móvil
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
   }
 
   .form-actions {
-    margin-top: 2rem; display: flex; gap: 10px; justify-content: flex-end;
+    margin-top: 2rem; 
+    display: flex; 
+    gap: 10px; 
+    justify-content: flex-end;
+
+    @media (max-width: 640px) {
+      margin-top: 1.5rem;
+      flex-direction: column-reverse;
+      gap: 8px;
+    }
+
+    @media (max-width: 480px) {
+      position: sticky;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      padding: 1rem;
+      margin: 1.5rem -1rem -1rem;
+      border-top: 1px solid #e2e8f0;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+      z-index: 10;
+    }
     
     button { 
-      padding: 12px 25px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; 
+      padding: 12px 25px; 
+      border-radius: 6px; 
+      border: none; 
+      cursor: pointer; 
+      font-weight: bold; 
       transition: $transition-fast;
+      min-height: 44px;
+      font-size: 0.95rem;
+
+      @media (max-width: 640px) {
+        width: 100%;
+        min-height: 48px;
+        font-size: 1rem;
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
     }
-    .btn-save { background: $color-dark; color: white; &:hover { background: $color-primary; } }
-    .btn-cancel { background: #e2e8f0; color: $color-dark; &:hover { background: #cbd5e1; } }
+
+    .btn-save { 
+      background: $color-dark; 
+      color: white; 
+      
+      &:hover { 
+        background: $color-primary; 
+      }
+
+      @media (max-width: 640px) {
+        order: 1;
+      }
+    }
+
+    .btn-cancel { 
+      background: #e2e8f0; 
+      color: $color-dark; 
+      
+      &:hover { 
+        background: #cbd5e1; 
+      }
+
+      @media (max-width: 640px) {
+        order: 2;
+      }
+    }
   }
 }
 
 @keyframes slideDown {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { 
+    opacity: 0; 
+    transform: translateY(-20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+/* --- MEJORAS ADICIONALES PARA MÓVIL --- */
+
+// Prevenir zoom en inputs en iOS
+@media (max-width: 480px) {
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="date"],
+  select,
+  textarea {
+    font-size: 16px !important; // Importante para iOS
+  }
+}
+
+// Mejor experiencia táctil
+@media (hover: none) and (pointer: coarse) {
+  button, 
+  .btn-add,
+  .inventory-thumb {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Scroll suave en móvil
+@media (max-width: 640px) {
+  .inventory-content {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 }

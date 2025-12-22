@@ -174,11 +174,11 @@ const InventoryMgr = () => {
     setGlobalSelection([]);
   };
 
-  // --- NUEVA FUNCIÓN: DAR DE BAJA / REACTIVAR ---
+  // --- NUEVA FUNCIÓN: DAR DE BAJA / REACTIVAR (FALTABA ESTA FUNCIÓN) ---
   const handleToggleBaja = async () => {
     if (!editingId) return;
-    
-    // Buscar el ítem actual
+
+    // Buscar el estado actual del item que estamos editando
     const currentItem = items.find(i => i.id === editingId);
     if (!currentItem) return;
 
@@ -206,7 +206,7 @@ const InventoryMgr = () => {
       
       if (!error) {
         Swal.fire('Actualizado', `Estado cambiado correctamente.`, 'success');
-        cancelEdit(); // Cerramos el formulario
+        cancelEdit(); // Cerramos el formulario al terminar
         fetchInventory(); // Recargamos la tabla
       }
     }
@@ -351,7 +351,7 @@ const InventoryMgr = () => {
              </div>
              
              <div className="form-actions" style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginTop:'20px'}}>
-               {/* BOTÓN DAR DE BAJA (Solo si estamos editando) */}
+               {/* BOTÓN DAR DE BAJA AHORA SÍ FUNCIONA */}
                {editingId && (
                  <button 
                    type="button" 
@@ -395,7 +395,6 @@ const InventoryMgr = () => {
             <tbody>
               {items.map((item) => {
                 const totalFotos = (item.imagen_url ? 1 : 0) + (item.inventario_fotos?.length || 0);
-                // Si tiene fecha_baja, se marca visualmente
                 const isBaja = !!item.fecha_baja;
 
                 return (
@@ -421,7 +420,6 @@ const InventoryMgr = () => {
                     </td>
                     <td><span className="badge">{CATEGORIAS.find(c => c.id === item.categoria_macro)?.label || item.categoria_macro}</span></td>
                     
-                    {/* SOLO EDICIÓN Y BORRADO EN TABLA */}
                     <td>
                       <div style={{display:'flex', gap:'8px'}}>
                         <button onClick={() => startEdit(item)} style={{border:'none', background:'none', color:'#FFD700', fontSize:'1.1rem', cursor:'pointer'}} title="Editar"><FaEdit/></button>

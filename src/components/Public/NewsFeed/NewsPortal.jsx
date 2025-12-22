@@ -4,12 +4,12 @@ import Swal from 'sweetalert2';
 import './NewsPortal.scss';
 
 const NewsPortal = () => {
-  // --- LÓGICA DE NOTICIAS ---
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [iframeWidth, setIframeWidth] = useState(500);
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchNews = async () => {
       try {
         const { data, error } = await supabase
           .from('eventos')
@@ -23,7 +23,23 @@ const NewsPortal = () => {
         setLoading(false);
       }
     };
-    fetch();
+    fetchNews();
+  }, []);
+
+  useEffect(() => {
+    const updateWidth = () => {
+      if (window.innerWidth <= 480) {
+        setIframeWidth(340);
+      } else if (window.innerWidth <= 768) {
+        setIframeWidth(450);
+      } else {
+        setIframeWidth(500);
+      }
+    };
+    
+    updateWidth();
+    window.addEventListener('resize', updateWidth);
+    return () => window.removeEventListener('resize', updateWidth);
   }, []);
 
   const readMore = (n) => {
@@ -41,7 +57,6 @@ const NewsPortal = () => {
     });
   };
 
-  // --- LÓGICA DE FACEBOOK ---
   const fbPage = "https://www.facebook.com/profile.php?id=61552348490877";
   const encodedUrl = encodeURIComponent(fbPage);
 
@@ -51,7 +66,7 @@ const NewsPortal = () => {
 
       <div className="news-layout">
         
-        {/* IZQUIERDA: NOTICIAS */}
+        {/* IZQUIERDA: NOTICIAS PROPIAS */}
         <div className="internal-news-column">
           <h3 className="column-title">Novedades del Cuartel</h3>
           
@@ -90,11 +105,10 @@ const NewsPortal = () => {
           <div className="fb-container">
             <h3>Síguenos en Facebook</h3>
             
-            {/* IFRAME MODIFICADO: width=500 en la URL y en el atributo */}
             <iframe 
-              src={`https://www.facebook.com/plugins/page.php?href=${encodedUrl}&tabs=timeline&width=500&height=700&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId`}
-              width="500" 
-              height="700" 
+              src={`https://www.facebook.com/plugins/page.php?href=${encodedUrl}&tabs=timeline&width=${iframeWidth}&height=800&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId`}
+              width="100%"
+              height="800"
               style={{ border: 'none', overflow: 'hidden', display: 'block' }} 
               scrolling="no" 
               frameBorder="0" 
@@ -104,10 +118,11 @@ const NewsPortal = () => {
             ></iframe>
             
             <a href={fbPage} target="_blank" rel="noreferrer" className="fb-link">
-              Ir a la página oficial →
+              Ver página oficial
             </a>
           </div>
         </div>
+
       </div>
     </div>
   );

@@ -25,7 +25,7 @@ const Footer = () => {
           <h4>Ubicación Cuartel</h4>
           <div className="map-wrapper">
             <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3086.079287372937!2d-69.8690324235767!3d-37.05676357217316!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x96708300600122eb%3A0xe5492d2f703e7c8d!2sBomberos%20Voluntarios%20Buta%20Ranquil!5e0!3m2!1ses!2sar!4v1709228892185!5m2!1ses!2sar" 
+              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d2455.412754375479!2d-69.87814914363184!3d-37.05089639915079!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x96722500758553d3%3A0xb525160db7436483!2sCuartel%20General%20Bomberos%20Central%2027!5e0!3m2!1ses!2sar!4v1766437042191!5m2!1ses!2sar" 
               loading="lazy" 
               referrerPolicy="no-referrer-when-downgrade"
             ></iframe>

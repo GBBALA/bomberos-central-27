@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
-import { FaBars, FaTimes, FaMobileAlt, FaUserCircle } from 'react-icons/fa'; // Icono celular
+import { 
+  FaBars, FaTimes, FaPhoneAlt, FaUserCircle, FaHome, FaTruck, 
+  FaNewspaper, FaUserPlus, FaClipboardList, FaBoxOpen, FaUsers, 
+  FaCalendarAlt, FaSignOutAlt, FaShieldAlt 
+} from 'react-icons/fa';
 import './Navbar.scss';
 
 const Navbar = () => {
@@ -37,65 +41,84 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar">
-      <div className="navbar__container">
-        
-        {/* LOGO */}
-        <Link to="/" className="nav-brand" onClick={closeMenu}>
-          <img src="/logo.png" alt="Escudo" />
-          <div className="brand-text">
-            <h1>BOMBEROS</h1>
-            <span>CENTRAL 27</span>
-          </div>
-        </Link>
-
-        {/* HAMBURGUESA */}
-        <div className="mobile-icon" onClick={toggleMenu}>
-          {isOpen ? <FaTimes /> : <FaBars />}
-        </div>
-
-        {/* LINKS */}
-        <div className={`nav-links ${isOpen ? 'active' : ''}`}>
+    <>
+      <nav className="navbar">
+        <div className="navbar__container">
           
-          {user ? (
-            // --- ADMIN ---
-            <>
-              <div style={{color:'#FFD700', fontSize:'0.8rem', border:'1px solid #FFD700', padding:'2px 8px', borderRadius:'4px'}}>ADMIN</div>
-              <Link to="/admin/dashboard" onClick={closeMenu}>Aspirantes</Link>
-              <Link to="/admin/inventario" onClick={closeMenu}>Inventario</Link>
-              <Link to="/admin/personal" onClick={closeMenu}>Personal</Link>
-              <Link to="/admin/guardias" onClick={closeMenu}>Guardias</Link>
-              <Link to="/admin/eventos" onClick={closeMenu}>Novedades</Link>
-              
-              <button onClick={handleLogout} style={{background:'none', border:'1px solid #dc3545', color:'#ffadad', padding:'5px 15px', borderRadius:'20px', cursor:'pointer'}}>
-                Salir
-              </button>
-            </>
-          ) : (
-            // --- PÚBLICO ---
-            <>
-              <Link to="/" onClick={closeMenu}>Inicio</Link>
-              <a href="#nuestra-flota" onClick={() => scrollToSection('nuestra-flota')}>Flota</a>
-              <a href="#novedades" onClick={() => scrollToSection('novedades')}>Novedades</a>
+          {/* LOGO */}
+          <Link to="/" className="nav-brand" onClick={closeMenu}>
+            <img src="/logo.png" alt="Escudo" />
+            <div className="brand-text">
+              <h1>BOMBEROS</h1>
+              <span>CENTRAL 27</span>
+            </div>
+          </Link>
 
-              <Link to="/inscripcion" className="btn-recruit" onClick={closeMenu}>
-                Quiero ser Bombero
-              </Link>
+          {/* HAMBURGUESA */}
+          <div className={`mobile-icon ${isOpen ? 'open' : ''}`} onClick={toggleMenu}>
+            {isOpen ? <FaTimes /> : <FaBars />}
+          </div>
 
-              {/* BOTÓN CELULAR GUARDIA */}
-              <a href="tel:2942533813" className="emergency-call">
-                <FaMobileAlt /> 
-              </a>
+          {/* LINKS */}
+          <div className={`nav-links ${isOpen ? 'active' : ''}`}>
+            
+            {user ? (
+              // --- MODO ADMIN ---
+              // IMPORTANTE: Usar Fragment <> para que no se rompa el flexbox
+              <>
+                <div className="admin-badge">ADMIN</div>
+                
+                <Link to="/admin/dashboard" onClick={closeMenu}>
+                  <FaClipboardList /> Aspirantes
+                </Link>
+                
+                <Link to="/admin/inventario" onClick={closeMenu}>
+                  <FaBoxOpen /> Inventario
+                </Link>
+                
+                <Link to="/admin/personal" onClick={closeMenu}>
+                  <FaUsers /> Personal
+                </Link>
+                
+                <Link to="/admin/guardias" onClick={closeMenu}>
+                  <FaShieldAlt /> Guardias
+                </Link>
+                
+                <Link to="/admin/eventos" onClick={closeMenu}>
+                  <FaCalendarAlt /> Novedades
+                </Link>
+                
+                <button onClick={handleLogout} className="btn-logout">
+                  <FaSignOutAlt /> Salir
+                </button>
+              </>
+            ) : (
+              // --- MODO PÚBLICO ---
+              <>
+                <Link to="/" onClick={closeMenu}><FaHome /> Inicio</Link>
+                <a href="#nuestra-flota" onClick={() => scrollToSection('nuestra-flota')}><FaTruck /> Flota</a>
+                <a href="#novedades" onClick={() => scrollToSection('novedades')}><FaNewspaper /> Novedades</a>
 
-              <Link to="/login" className="btn-login-icon" onClick={closeMenu} title="Acceso Personal">
-                <FaUserCircle />
-              </Link>
-            </>
-          )}
+                <Link to="/inscripcion" className="btn-recruit" onClick={closeMenu}>
+                  <FaUserPlus /> Quiero ser Bombero
+                </Link>
 
+                <a href="tel:2942533813" className="emergency-call">
+                  <FaPhoneAlt /> 
+                </a>
+
+                <Link to="/login" className="btn-login-icon" onClick={closeMenu} title="Acceso Personal">
+                  <FaUserCircle />
+                </Link>
+              </>
+            )}
+
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+      
+      <div className={`menu-overlay ${isOpen ? 'active' : ''}`} onClick={closeMenu}></div>
+    </>
   );
 };
 

@@ -41,7 +41,7 @@ const InventoryGallery = () => {
           <article className="vehicle-card" key={item.id}>
             <div className="vehicle-card__image-container">
               <img 
-                src={item.imagen_url || 'https://via.placeholder.com/400x300?text=Vehiculo'} 
+                src={item.imagen_url || 'https://placehold.co/400x300?text=Vehiculo'} 
                 alt={item.nombre} 
               />
             </div>
